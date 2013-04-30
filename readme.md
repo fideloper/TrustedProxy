@@ -7,6 +7,7 @@ Useful if you're web server sits behind a load balancer, reverse proxy or other 
 ## Installation
 
 Installation is pretty easy:
+
 1. Install the package
 2. Add the Service Provider
 3. Setup the configuration
