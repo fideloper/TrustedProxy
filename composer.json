@@ -1,0 +1,20 @@
+{
+    "name": "fideloper/proxy",
+    "description": "Set trusted proxies for Laravel",
+    "authors": [
+        {
+            "name": "Chris Fidao",
+            "email": "fideloper@gmail.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.3.0",
+        "illuminate/support": "4.0.x"
+    },
+    "autoload": {
+        "psr-0": {
+            "Fideloper\\Proxy": "src/"
+        }
+    },
+    "minimum-stability": "dev"
+}
