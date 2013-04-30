@@ -7,9 +7,9 @@ Useful if you're web server sits behind a load balancer, reverse proxy or other 
 ## Installation
 
 Installation is pretty easy:
-1) Install the package
-2) Add the Service Provider
-3) Setup the configuration
+1. Install the package
+2. Add the Service Provider
+3. Setup the configuration
 
 ### Install the package
 
@@ -28,7 +28,7 @@ Once that's added, run `$ composer update` to download the files.
 
 The next step to installation is to add the Service Provider.
 
-Edit `app/config/app.php` and add this to your other Service Providers:
+Edit `app/config/app.php` and add the provided Service Provider:
 
 ```php
     'providers' => array(
@@ -39,7 +39,7 @@ Edit `app/config/app.php` and add this to your other Service Providers:
 
 ### Setup the Configuration
 
-This package expects `proxy.proxies` configuration item to be set. You can do this by creating a proxy configuration file:
+This package expects the `proxy.proxies` configuration item to be set. You can do this by creating a proxy configuration file:
 
 Create `app/config/proxy.php`:
 
@@ -62,8 +62,8 @@ Create `app/config/proxy.php`:
         */
 
         'proxies' => array(
-	    '10.1.28.234'
-	)
+		'10.1.28.234',
+	),
 
     );
 ```
@@ -91,7 +91,7 @@ In that case, you can set the 'proxies' variable to '*':
         |
         */
 
-        'proxies' => '*'
+        'proxies' => '*',
 
     );
 ```
