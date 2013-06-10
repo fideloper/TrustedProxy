@@ -4,6 +4,11 @@ Allows correct session handling and logging by adding Trusted Proxies to Laravel
 
 Useful if you're web server sits behind a load balancer, reverse proxy or other intermediary.
 
+## The Problem
+If your site sits behind a load balancer, gateway cache or other "reverse proxy" type of setup, each web request has the potential to appear to always come from that proxy, rather than the users interfacing with your site.
+
+This library allows you to take advantage of Symfony's knowledge of proxies. See below for more explanation on the topic of "trusted proxies".
+
 ## Installation
 
 Installation is pretty easy:
@@ -70,7 +75,7 @@ Create `app/config/proxy.php`:
 ```
 In the example above, we are pretending we have a load balancer which lives at 10.1.28.234.
 
-Note: If you use Rackspace or other PaaS "cloud" providers which provide load balancers, the IP adddress of the load balancer may not be known. Rackspace uses many load balancers, and so you never know what IP address the request will be coming from. This means every IP address would need to be trusted.
+**Note:** If you use Rackspace or other PaaS "cloud" services which provide load balancers, the IP adddress of the load balancer may not be known. Rackspace uses many load balancers, and so you never know the IP address of the load balancer. This means every IP address would need to be trusted - any of them could be from the load balancer, and therefore the `X-Forwarded-For` header must always be trusted.
 
 In that case, you can set the 'proxies' variable to '*':
 
@@ -102,23 +107,19 @@ This will tell Laravel to trust all IP addresses as a proxy.
 
 ## Some Explanation
 
+If your site is behind a proxy, your web application may have issues where the site cannot distinguish between users:
+
+1. Users may not have unique sessions - This can lead to possible access to incorrect account, or an inability to log in at all
+2. Logging or other data-collection processes may appear to come from one location (the proxy itself) leaving you with no way to distinguish traffic/actions taken by individuals.
+
+We can work around that by listening for the `X-Forwarded-For` header. This header is often added by proxies to let your web application know details about the originator of the request (the client's IP address).
+
 Laravel uses Symfony for handling Requests and Responses. These classes have means to handle proxies, however Laravel doesn't have a configuration option for this out of the box.
 
 That's not necessarily bad, but the need for it will arise if and when your Laravel app web server sits behind a load balancer or uses a reverse-proxy such as Varnish.
-
-> I'll refer to load balancers, reverse-proxies or similar as "intermediaries", as they sit between your clients and your web servers.
-
-If you do have an intermediary between your clients and your web server(s), your web server will see each request as coming from the intermediary, rather than the client.
-
-This means every request will come from the same location (same IP address), and potentially wreak havoc on session handling, logging, or anything that relies on having the client's IP address handy.
-
-To combat this, common convention is for the intermediary to include a `HTTP_X_FORWARDED_FOR` header, with the client's IP address. If this header exists, the client IP address should be taken from that header, rather than the usual suspects (`REMOTE_ADDR` for instance).
 
 ### Proxies in Laravel
 
 In order for Laravel to check for the forwarded IP address, we need tell Laravel what IP addresses to "trust" as a proxy. If it finds the IP address received is a trusted IP, it will look for the forwarded IP address and set it as the client's true IP address.
 
 If we do not tell Laravel what the IP address of our proxy (or proxies) is, it will ignore it for security reasons.
-
-> Note: If you use Rackspace or other PaaS "cloud" providers which provide load balancers, the IP adddress of the load balancer may not be known. For instance, rackspace uses many load balancers, and so you never know what IP address the request will be coming from. This means every IP address would need to be trusted.
-> This is accomplished by setting 'proxies' to '*' as shown above.
