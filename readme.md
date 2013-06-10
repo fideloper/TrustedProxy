@@ -75,7 +75,7 @@ Create `app/config/proxy.php`:
 ```
 In the example above, we are pretending we have a load balancer which lives at 10.1.28.234.
 
-Note: If you use Rackspace or other PaaS "cloud" providers which provide load balancers, the IP adddress of the load balancer may not be known. Rackspace uses many load balancers, and so you never know what IP address the request will be coming from. This means every IP address would need to be trusted.
+**Note:** If you use Rackspace or other PaaS "cloud" services which provide load balancers, the IP adddress of the load balancer may not be known. Rackspace uses many load balancers, and so you never know the IP address of the load balancer. This means every IP address would need to be trusted - any of them could be from the load balancer, and therefore the `X-Forwarded-For` header must always be trusted.
 
 In that case, you can set the 'proxies' variable to '*':
 
