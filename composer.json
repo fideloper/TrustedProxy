@@ -1,6 +1,7 @@
 {
     "name": "fideloper/proxy",
     "description": "Set trusted proxies for Laravel",
+    "version": "1.0.0",
     "authors": [
         {
             "name": "Chris Fidao",
