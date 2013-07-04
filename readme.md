@@ -1,6 +1,5 @@
 # Laravel Trusted Proxies
 
-[![Latest Stable Version](https://poser.pugx.org/fideloper/proxy/v/stable.png)](https://packagist.org/packages/fideloper/proxy)
 [![Total Downloads](https://poser.pugx.org/fideloper/proxy/downloads.png)](https://packagist.org/packages/fideloper/proxy)
 
 Allows correct session handling and logging by adding Trusted Proxies to Laravel.
