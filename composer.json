@@ -17,6 +17,5 @@
             "Fideloper\\Proxy": "src/"
         }
     },
-    "minimum-stability": "dev",
     "license": "MIT"
 }
