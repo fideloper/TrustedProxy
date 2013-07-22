@@ -1,6 +1,7 @@
 {
     "name": "fideloper/proxy",
     "description": "Set trusted proxies for Laravel",
+    "keywords": ["proxy", "trusted proxy", "load balancing"],
     "version": "1.0.0",
     "authors": [
         {
