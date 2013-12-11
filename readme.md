@@ -39,10 +39,10 @@ The next step to installation is to add the Service Provider.
 Edit `app/config/app.php` and add the provided Service Provider:
 
 ```php
-    'providers' => array(
-        ... other providers...
-        Fideloper\Proxy\ProxyServiceProvider,
-     );
+'providers' => array(
+    ... other providers ...
+    Fideloper\Proxy\ProxyServiceProvider,
+);
 ```
 
 ### Setup the Configuration
@@ -52,28 +52,28 @@ This package expects the `proxy.proxies` configuration item to be set. You can d
 Create `app/config/proxy.php`:
 
 ```php
-    <?php
-    return array(
+<?php
+return array(
 
-        /*
-        |--------------------------------------------------------------------------
-        | Trusted Proxies
-        |--------------------------------------------------------------------------
-        |
-        | Set an array of trusted proxies, so Laravel knows to grab the client's
-        | IP address via the HTTP_X_FORWARDED_FOR header.
-        |
-        | To trust all proxies, use the value '*':
-        |
-        | 'proxies' => '*'
-        |
-        */
+    /*
+    |--------------------------------------------------------------------------
+    | Trusted Proxies
+    |--------------------------------------------------------------------------
+    |
+    | Set an array of trusted proxies, so Laravel knows to grab the client's
+    | IP address via the HTTP_X_FORWARDED_FOR header.
+    |
+    | To trust all proxies, use the value '*':
+    |
+    | 'proxies' => '*'
+    |
+    */
 
-        'proxies' => array(
-		'10.1.28.234',
-	),
+    'proxies' => array(
+        '10.1.28.234',
+    ),
 
-    );
+);
 ```
 In the example above, we are pretending we have a load balancer which lives at 10.1.28.234.
 
@@ -82,26 +82,26 @@ In the example above, we are pretending we have a load balancer which lives at 1
 In that case, you can set the 'proxies' variable to '*':
 
 ```php
-    <?php
-    return array(
+<?php
+return array(
 
-        /*
-        |--------------------------------------------------------------------------
-        | Trusted Proxies
-        |--------------------------------------------------------------------------
-        |
-        | Set an array of trusted proxies, so Laravel knows to grab the client's
-        | IP address via the HTTP_X_FORWARDED_FOR header.
-        |
-        | To trust all proxies, use the value '*':
-        |
-        | 'proxies' => '*'
-        |
-        */
+    /*
+    |--------------------------------------------------------------------------
+    | Trusted Proxies
+    |--------------------------------------------------------------------------
+    |
+    | Set an array of trusted proxies, so Laravel knows to grab the client's
+    | IP address via the HTTP_X_FORWARDED_FOR header.
+    |
+    | To trust all proxies, use the value '*':
+    |
+    | 'proxies' => '*'
+    |
+    */
 
-        'proxies' => '*',
+    'proxies' => '*',
 
-    );
+);
 ```
 
 This will tell Laravel to trust all IP addresses as a proxy.
