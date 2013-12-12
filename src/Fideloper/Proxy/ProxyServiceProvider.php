@@ -12,23 +12,38 @@ class ProxyServiceProvider extends ServiceProvider {
 	protected $defer = false;
 
 	/**
+	 * Bootstrap the application events.
+	 *
+	 * @return void
+	 */
+	public function boot()
+	{
+		$this->package('fideloper/proxy');
+	}
+
+	/**
 	 * Register the service provider.
 	 *
 	 * @return void
 	 */
 	public function register()
 	{
-		$request = $this->app['request'];
-		$proxies = $this->app['config']->get('proxy.proxies');
-
-		if( $proxies === '*' )
+		// On booting to ensure config
+		// is loaded
+		$this->app->booting(function($app)
 		{
-			// Trust all proxies - proxy is whatever
-			// the current client IP address is
-			$proxies = array( $request->getClientIp() );
-		}
+			$request = $app['request'];
+			$proxies = $app['config']->get('proxy::proxies');
 
-		$request->setTrustedProxies( $proxies );
+			if( $proxies === '*' )
+			{
+				// Trust all proxies - proxy is whatever
+				// the current client IP address is
+				$proxies = array( $request->getClientIp() );
+			}
+
+			$request->setTrustedProxies( $proxies );
+		});
 	}
 
 	/**
@@ -38,7 +53,7 @@ class ProxyServiceProvider extends ServiceProvider {
 	 */
 	public function provides()
 	{
-		return array();
+		return array('proxy');
 	}
 
 }
