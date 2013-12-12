@@ -13,8 +13,13 @@ return array(
     |
     | 'proxies' => '*'
     |
+    | To trust only certain proxies, set an array of those proxies'
+    | IP addresses
+    |
+    | 'proxies' => array('192.168.1.1', '192.168.1.2')
+    |
     */
 
-    'proxies' => array(),
+    'proxies' => '*',
 
 );
