@@ -23,6 +23,12 @@ Installation is pretty easy:
 
 This package lives inside of Packagist and is therefore easily installable via Composer
 
+Method One:
+
+    $ composer require fideloper/proxy:dev-master
+
+Method Two:
+
 ```json
 {
     "require": {
@@ -39,69 +45,81 @@ The next step to installation is to add the Service Provider.
 Edit `app/config/app.php` and add the provided Service Provider:
 
 ```php
-    'providers' => array(
-        ... other providers...
-        Fideloper\Proxy\ProxyServiceProvider,
-     );
+'providers' => array(
+    ... other providers ...
+    Fideloper\Proxy\ProxyServiceProvider,
+);
 ```
 
 ### Setup the Configuration
 
-This package expects the `proxy.proxies` configuration item to be set. You can do this by creating a proxy configuration file:
+This package expects the `proxies` configuration item to be set. You can do this by creating a proxy configuration file via `artisan`:
 
-Create `app/config/proxy.php`:
+    $ php artisan config:publish fideloper/proxy
+
+Once that's finished, there will be a new configuration file to edit at `app/config/packages/fideloper/proxy/config.php`:
 
 ```php
-    <?php
-    return array(
+<?php
+return array(
 
-        /*
-        |--------------------------------------------------------------------------
-        | Trusted Proxies
-        |--------------------------------------------------------------------------
-        |
-        | Set an array of trusted proxies, so Laravel knows to grab the client's
-        | IP address via the HTTP_X_FORWARDED_FOR header.
-        |
-        | To trust all proxies, use the value '*':
-        |
-        | 'proxies' => '*'
-        |
-        */
+    /*
+    |--------------------------------------------------------------------------
+    | Trusted Proxies
+    |--------------------------------------------------------------------------
+    |
+    | Set an array of trusted proxies, so Laravel knows to grab the client's
+    | IP address via the HTTP_X_FORWARDED_FOR header.
+    |
+    | To trust all proxies, use the value '*':
+    |
+    | 'proxies' => '*'
+    |
+    | To trust only certain proxies, set an array of those proxies'
+    | IP addresses
+    |
+    | 'proxies' => array('192.168.1.1', '192.168.1.2')
+    |
+    */
 
-        'proxies' => array(
-		'10.1.28.234',
-	),
+    'proxies' => array(
+        '10.1.28.234'
+    ),
 
-    );
+);
 ```
-In the example above, we are pretending we have a load balancer which lives at 10.1.28.234.
+In the example above, we are pretending we have a load balancer or other proxy which lives at 10.1.28.234.
 
 **Note:** If you use Rackspace or other PaaS "cloud" services which provide load balancers, the IP adddress of the load balancer may not be known. Rackspace uses many load balancers, and so you never know the IP address of the load balancer. This means every IP address would need to be trusted - any of them could be from the load balancer, and therefore the `X-Forwarded-For` header must always be trusted.
 
-In that case, you can set the 'proxies' variable to '*':
+**In that case, you can set the 'proxies' variable to '*':**
 
 ```php
-    <?php
-    return array(
+<?php
+return array(
 
-        /*
-        |--------------------------------------------------------------------------
-        | Trusted Proxies
-        |--------------------------------------------------------------------------
-        |
-        | Set an array of trusted proxies, so Laravel knows to grab the client's
-        | IP address via the HTTP_X_FORWARDED_FOR header.
-        |
-        | To trust all proxies, use the value '*':
-        |
-        | 'proxies' => '*'
-        |
-        */
+    /*
+    |--------------------------------------------------------------------------
+    | Trusted Proxies
+    |--------------------------------------------------------------------------
+    |
+    | Set an array of trusted proxies, so Laravel knows to grab the client's
+    | IP address via the HTTP_X_FORWARDED_FOR header.
+    |
+    | To trust all proxies, use the value '*':
+    |
+    | 'proxies' => '*'
+    |
+    | To trust only certain proxies, set an array of those proxies'
+    | IP addresses
+    |
+    | 'proxies' => array('192.168.1.1', '192.168.1.2')
+    |
+    */
 
-        'proxies' => '*',
+    'proxies' => '*',
 
-    );
+);
 ```
 
 This will tell Laravel to trust all IP addresses as a proxy.
