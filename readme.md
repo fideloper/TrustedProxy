@@ -7,24 +7,24 @@ Allows correct URL generation, redirecting, session handling and logging to Lara
 Useful if your web servers sit behind a load balancer, http cache, reverse proxy or other intermediary.
 
 ## TL;DR Setup:
-    
+
     # Install Trusted Proxy:
     $ composer require fideloper/proxy:dev-master
-    
+
     # Add the Service Provider:
     'providers' => array(
-    	... other providers ...
-    	Fideloper\Proxy\ProxyServiceProvider,
-	);
-	
-	# Publish the config file:
-	$ php artisan config:publish fideloper/proxy
-	
-	# Edit the config file:
-	<?php
-	return array(
-		'proxies' => array( '10.1.28.234' )
-	);
+        ... other providers ...
+        Fideloper\Proxy\ProxyServiceProvider,
+    );
+
+    # Publish the config file:
+    $ php artisan config:publish fideloper/proxy
+
+    # Edit the config file:
+    <?php
+    return array(
+        'proxies' => array( '10.1.28.234' )
+    );
 
 ## What's This Do?
 If your site sits behind a load balancer, gateway cache or other "reverse proxy", each web request has the potential to appear to always come from that proxy, rather than the client actually making requests on your site.
