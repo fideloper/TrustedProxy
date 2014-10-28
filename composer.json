@@ -2,6 +2,7 @@
     "name": "fideloper/proxy",
     "description": "Set trusted proxies for Laravel",
     "keywords": ["proxy", "trusted proxy", "load balancing"],
+    "license": "MIT",
     "authors": [
         {
             "name": "Chris Fidao",
@@ -17,5 +18,9 @@
             "Fideloper\\Proxy": "src/"
         }
     },
-    "license": "MIT"
+    "extra": {
+        "branch-alias": {
+            "dev-master": "2.0-dev"
+        }
+    }
 }
