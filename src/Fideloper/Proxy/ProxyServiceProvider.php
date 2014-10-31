@@ -2,8 +2,8 @@
 
 use Illuminate\Support\ServiceProvider;
 
-class ProxyServiceProvider extends ServiceProvider {
-
+class ProxyServiceProvider extends ServiceProvider
+{
     /**
      * Indicates if loading of the provider is deferred.
      *
@@ -26,14 +26,13 @@ class ProxyServiceProvider extends ServiceProvider {
         $request = $this->app['request'];
         $proxies = $this->app['config']->get('proxy::proxies');
 
-        if( $proxies === '*' )
-        {
+        if ($proxies === '*') {
             // Trust all proxies - proxy is whatever
             // the current client IP address is
-            $proxies = array( $request->getClientIp() );
+            $proxies = array($request->getClientIp());
         }
 
-        $request->setTrustedProxies( $proxies );
+        $request->setTrustedProxies($proxies);
     }
 
     /**
@@ -45,5 +44,4 @@ class ProxyServiceProvider extends ServiceProvider {
     {
         // No services registered
     }
-
 }
