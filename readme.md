@@ -45,14 +45,14 @@ This package lives inside of Packagist and is therefore easily installable via C
 
 **Method One:**
 
-    $ composer require fideloper/proxy:dev-master
+    $ composer require fideloper/proxy
 
 **Method Two:**
 
 ```json
 {
     "require": {
-        "fideloper/proxy": "dev-master"
+        "fideloper/proxy": "~2.0"
     }
 }
 ```
