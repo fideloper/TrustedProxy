@@ -1,4 +1,6 @@
-<?php namespace Fideloper\Proxy;
+<?php
+
+namespace Fideloper\Proxy;
 
 use Illuminate\Support\ServiceProvider;
 
@@ -12,10 +14,10 @@ class ProxyServiceProvider extends ServiceProvider
     protected $defer = false;
 
     /**
-     * Add trusted proxies from config
-     * On boot, to ensure configs are loaded
-     * before we attempt to find configured
-     * trusted proxies
+     * Add trusted proxies from config.
+     *
+     * We do this on boot, to ensure all the configuration has been loaded
+     * before we attempt to find configured trusted proxies.
      *
      * @return void
      */
