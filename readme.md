@@ -1,5 +1,7 @@
 # Laravel Trusted Proxies
 
+[![Build Status](https://travis-ci.org/fideloper/TrustedProxy.svg?branch=master)](https://travis-ci.org/fideloper/TrustedProxy)
+
 [![Total Downloads](https://poser.pugx.org/fideloper/proxy/downloads.png)](https://packagist.org/packages/fideloper/proxy)
 
 Allows correct URL generation, redirecting, session handling and logging to Laravel when behind a proxy.
