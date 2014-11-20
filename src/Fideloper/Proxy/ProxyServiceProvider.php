@@ -29,9 +29,9 @@ class ProxyServiceProvider extends ServiceProvider
         $proxies = $this->app['config']->get('proxy::proxies');
 
         if ($proxies === '*') {
-            // Trust all proxies - proxy is whatever
-            // the current client IP address is
-            $proxies = array($request->getClientIp());
+            // Trust all proxies
+            // Accept all current client IP addresses
+            $proxies = $request->getClientIps();
         }
 
         $request->setTrustedProxies($proxies);
