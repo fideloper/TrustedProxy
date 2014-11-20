@@ -14,7 +14,7 @@ class ProxyServiceProviderTest extends PHPUnit_Framework_TestCase {
 
         $sp = new Fideloper\Proxy\ProxyServiceProvider(array(
             'config' => $config,
-            'request' => $reqyuest,
+            'request' => $request,
         ));
 
         // I'd love to do this, but there are too many dependencies here
