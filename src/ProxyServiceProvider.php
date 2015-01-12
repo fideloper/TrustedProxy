@@ -16,7 +16,7 @@ class ProxyServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        $proxies = $this->app->config->get('proxy::proxies');
+        $proxies = $this->app->config->get('proxy.proxies');
 
         if ($proxies === '*') {
             // Trust all proxies
@@ -35,6 +35,6 @@ class ProxyServiceProvider extends ServiceProvider
     public function register()
     {
         // set the default config
-        $this->config->set('proxy.proxies', '*');
+        $this->app->config->set('proxy.proxies', '*');
     }
 }
