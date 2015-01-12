@@ -1,38 +1,43 @@
 <?php
 
+use Fideloper\Proxy\ProxyServiceProvider;
+use Illuminate\Config\Repository;
+
 class ProxyServiceProviderTest extends PHPUnit_Framework_TestCase {
 
     public function test_trusted_proxy_can_be_created_and_configured()
     {
-        $config = array(
-            'proxy' => array(
-                'proxies' => '*',
-            ),
-        );
+        $app = new AppStub();
+        $app->config = new Repository();
+        $app->request = new RequestStub();
 
-        $request = new RequestStub;
+        $provider = new ProxyServiceProvider($app);
 
-        $sp = new Fideloper\Proxy\ProxyServiceProvider(array(
-            'config' => $config,
-            'request' => $request,
-        ));
+        $this->assertInstanceOf('Fideloper\Proxy\ProxyServiceProvider', $provider);
 
-        // I'd love to do this, but there are too many dependencies here
-        //$sp->boot();
+        $provider->register();
 
-        $this->assertInstanceOf('Fideloper\Proxy\ProxyServiceProvider', $sp);
+        $this->assertSame('*', $app->config->get('proxy.proxies'));
+
+        $provider->boot();
     }
 }
 
 class RequestStub {
 
-    public function  getClientIps()
+    public function getClientIps()
     {
-        return array('192.168.33.10', '10.0.1.10');
+        return ['192.168.33.10', '10.0.1.10'];
     }
 
     public function setTrustedProxies(array $cidrIps)
     {
         // slurp
     }
+}
+
+class AppStub
+{
+    public $config;
+    public $request;
 }
