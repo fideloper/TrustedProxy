@@ -8,6 +8,15 @@ Allows correct URL generation, redirecting, session handling and logging to Lara
 
 Useful if your web servers sit behind a load balancer, http cache, reverse proxy or other intermediary.
 
+## Develop Branch
+
+The develop branch is tracking changes for Laravel 5.
+
+**Plans:**
+
+1. Edit configuration to work with Laravel 5
+2. Convert this as a HTTP request/response middleware
+
 ## TL;DR Setup:
 
 ```php
