@@ -7,13 +7,6 @@ use Illuminate\Support\ServiceProvider;
 class ProxyServiceProvider extends ServiceProvider
 {
     /**
-     * Indicates if loading of the provider is deferred.
-     *
-     * @var bool
-     */
-    protected $defer = false;
-
-    /**
      * Add trusted proxies from config.
      *
      * We do this on boot, to ensure all the configuration has been loaded
@@ -23,18 +16,15 @@ class ProxyServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        $this->package('fideloper/proxy');
-
-        $request = $this->app['request'];
-        $proxies = $this->app['config']->get('proxy::proxies');
+        $proxies = $this->app->config->get('proxy::proxies');
 
         if ($proxies === '*') {
             // Trust all proxies
             // Accept all current client IP addresses
-            $proxies = $request->getClientIps();
+            $proxies = $this->app->request->getClientIps();
         }
 
-        $request->setTrustedProxies($proxies);
+        $this->app->request->setTrustedProxies($proxies);
     }
 
     /**
@@ -44,6 +34,7 @@ class ProxyServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        // No services registered
+        // set the default config
+        $this->config->set('proxy.proxies', '*');
     }
 }
