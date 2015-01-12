@@ -10,23 +10,25 @@ Useful if your web servers sit behind a load balancer, http cache, reverse proxy
 
 ## TL;DR Setup:
 
-    # Install Trusted Proxy:
-    $ composer require fideloper/proxy:dev-master
+```php
+# Install Trusted Proxy:
+$ composer require fideloper/proxy:~2.0
 
-    # Add the Service Provider:
-    'providers' => array(
-        ... other providers ...
-        Fideloper\Proxy\ProxyServiceProvider,
-    );
+# Add the Service Provider:
+'providers' => array(
+    ... other providers ...
+    Fideloper\Proxy\ProxyServiceProvider,
+);
 
-    # Publish the config file:
-    $ php artisan config:publish fideloper/proxy
+# Publish the config file:
+$ php artisan config:publish fideloper/proxy
 
-    # Edit the config file:
-    <?php
-    return array(
-        'proxies' => array( '10.1.28.234' )
-    );
+# Edit the config file:
+<?php
+return array(
+    'proxies' => array( '10.1.28.234' )
+);
+```
 
 ## What's This Do?
 If your site sits behind a load balancer, gateway cache or other "reverse proxy", each web request has the potential to appear to always come from that proxy, rather than the client actually making requests on your site.
