@@ -11,8 +11,11 @@
     ],
     "require": {
         "php": ">=5.4.0",
-        "illuminate/config": "~5.0",
-        "illuminate/support": "~5.0"
+        "illuminate/contracts": "~5.0"
+    },
+    "require-dev": {
+        "illuminate/http": "~5.0",
+        "mockery/mockery": "0.9.*@dev"
     },
     "autoload": {
         "psr-4": {
