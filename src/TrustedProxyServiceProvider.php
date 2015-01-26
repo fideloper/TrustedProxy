@@ -14,7 +14,7 @@ class TrustedProxyServiceProvider extends ServiceProvider {
     public function register()
     {
         $packageConfigFileSrc = __DIR__.'/trusted-proxy.php';
-        $packageConfigFileDest = config_path('snappy.php');
+        $packageConfigFileDest = config_path('trusted-proxy.php');
 
         $this->publishes([
             $packageConfigFileSrc => $packageConfigFileDest,
