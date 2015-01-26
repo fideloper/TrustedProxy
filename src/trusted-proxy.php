@@ -14,8 +14,13 @@ return [
      * of your proxy (e.g. if using Rackspace balancers).
      */
     'proxies' => [
-        '*', // Trust all proxies
+        '192.168.1.10',
     ],
+
+    /*
+     * Or, to trust all proxies, uncomment this:
+     */
+     # 'proxies' => '*',
 
     /*
      * Default Header Names

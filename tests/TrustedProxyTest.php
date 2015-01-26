@@ -3,7 +3,7 @@
 use Fideloper\Proxy\TrustProxies;
 use Illuminate\Http\Request;
 
-class ProxyServiceProviderTest extends PHPUnit_Framework_TestCase {
+class TrustedProxyTest extends PHPUnit_Framework_TestCase {
 
     /**
      * Test that Symfony does indeed NOT trust X-Forwarded-*
