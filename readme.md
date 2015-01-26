@@ -4,61 +4,120 @@
 
 [![Total Downloads](https://poser.pugx.org/fideloper/proxy/downloads.png)](https://packagist.org/packages/fideloper/proxy)
 
-Allows correct URL generation, redirecting, session handling and logging to Laravel when behind a proxy.
+## ~In Development~: Updated for Laravel 5.
 
-Useful if your web servers sit behind a load balancer, http cache, reverse proxy or other intermediary.
+**This branch will not be released until Laravel 5 is released.**
 
-## Develop Branch
+Laravel 5 has a much nicer system for Middleware. This package now makes use of that the Laravel HTTP Kernel.
 
-The develop branch is tracking changes for Laravel 5.
+New features include:
 
-**Plans:**
+1. TrustedProxies are now set as an HTTP Middleware (which makes more logical sense than a ServiceProvider. If you're unsure what that means, remember to "Just Trust Fideloper™").
+2. You can now set the trusted header names. This is useful for proxies that don't use the usual `X-Forwarded-*` headers. See [issue #7](https://github.com/fideloper/TrustedProxy/issues/7) for an example of that with Amazon's ELB.
 
-1. Edit configuration to work with Laravel 5
-2. Convert this as a HTTP request/response middleware
+To use this along with Laravel 5, run the following from your Laravel 5 project directory:
+
+```bash
+composer require fideloper/proxy:dev-develop
+```
+
+Or of course you can edit your `composer.json` file directly:
+
+```json
+{
+    "require": {
+        "fideloper/proxy": "dev-develop"
+    }
+}
+```
+
+## WAT
+
+Setting a trusted proxy allows for correct URL generation, redirecting, session handling and logging in Laravel when behind a proxy.
+
+This is useful if your web servers sit behind a load balancer, http cache, or other intermediary (reverse) proxy.
 
 ## TL;DR Setup:
 
-```php
-# Install Trusted Proxy:
-$ composer require fideloper/proxy:~2.0
+Install Trusted Proxy:
 
-# Add the Service Provider:
+```bash
+$ composer require fideloper/proxy:dev-develop
+```
+
+Add the Service Provider:
+
+```php
 'providers' => array(
     ... other providers ...
-    Fideloper\Proxy\ProxyServiceProvider,
-);
-
-# Publish the config file:
-$ php artisan config:publish fideloper/proxy
-
-# Edit the config file:
-<?php
-return array(
-    'proxies' => array( '10.1.28.234' )
+    Fideloper\Proxy\TrustedProxyServiceProvider,
 );
 ```
 
+Publish the config file:
+
+```bash
+$ php artisan vendor:publish
+Copied File [/vendor/fideloper/proxy/src/trusted-proxy.php] To [/config/trusted-proxy.php]
+Publishing Complete!
+```
+
+Register the HTTP Middleware in file "app/Http/Kernel.php"
+
+```php
+    protected $middleware = [
+        // Illuminate middlewares omitted for brevity
+
+        'Fideloper\Proxy\TrustProxies',
+    ];
+```
+
+Then edit the published configuration file `config/trusted-proxy.php` as needed.
+
+The below will trust a proxy, such as a load balancer or web cache, at IP address 192.168.10.10:
+
+```php
+<?php
+
+return [
+    'proxies' => [
+        '192.168.10.10',
+    ],
+
+    // These are defaults set in the config:
+    'headers' => [
+        \Illuminate\Http\Request::HEADER_CLIENT_IP    => 'X_FORWARDED_FOR',
+        \Illuminate\Http\Request::HEADER_CLIENT_HOST  => 'X_FORWARDED_HOST',
+        \Illuminate\Http\Request::HEADER_CLIENT_PROTO => 'X_FORWARDED_PROTO',
+        \Illuminate\Http\Request::HEADER_CLIENT_PORT  => 'X_FORWARDED_PORT',
+    ]
+];
+```
+
 ## What's This Do?
+
 If your site sits behind a load balancer, gateway cache or other "reverse proxy", each web request has the potential to appear to always come from that proxy, rather than the client actually making requests on your site.
 
-To fix that, this package allows you to take advantage of [Symfony's](https://github.com/symfony/symfony/blob/master/src/Symfony/Component/HttpFoundation/Request.php#L524) knowledge of proxies. See below for more explanation on the topic of "trusted proxies".
+To fix that, this package allows you to take advantage of [Symfony's](https://github.com/symfony/symfony/blob/master/src/Symfony/Component/HttpFoundation/Request.php) knowledge of proxies. See below for more explanation on the topic of "trusted proxies".
 
-## Installation
 
-Installation is simple:
+## Slightly Longer Installation Instructions
+
+Installation is typical of a Laravel 5 application:
 
 1. Install the package
 2. Add the Service Provider
-3. Configure your Trusted Proxies
+3. Publish the configuration file
+4. Add the Middleware
+5. Configure your Trusted Proxies
 
-### Install the package
+### Install the Package
 
-This package lives inside of Packagist and is therefore easily installable via Composer
+This package lives inside of Packagist and is therefore easily installable via Composer:
 
 **Method One:**
 
-    $ composer require fideloper/proxy
+    $ composer require fideloper/proxy:dev-develop
 
 **Method Two:**
 
@@ -75,102 +134,119 @@ Once that's added, run `$ composer update` to download the files.
 
 The next step to installation is to add the Service Provider.
 
-Edit `app/config/app.php` and add the provided Service Provider:
+Edit `config/app.php` and add the provided Service Provider:
 
 ```php
 'providers' => array(
-    ... other providers ...
+    # other providers omitted
     Fideloper\Proxy\ProxyServiceProvider,
 );
 ```
 
-### Setup the Configuration
+### Configure Trusted Proxies
 
-This package expects the `proxies` configuration item to be set. You can do this by creating a proxy configuration file via `artisan`:
+This package expects the `trusted-proxy.php` configuration file be available. You can do this by copying the package configuration file via the new Laravel 5 `artisan` command:
 
-    $ php artisan config:publish fideloper/proxy
+```bash
+$ php artisan vendor:publish
+```
 
-Once that's finished, there will be a new configuration file to edit at `app/config/packages/fideloper/proxy/config.php`:
+Once that's finished, there will be a new configuration file to edit at `config/trusted-proxy.php`:
 
 ```php
 <?php
-return array(
+
+return [
 
     /*
-    |--------------------------------------------------------------------------
-    | Trusted Proxies
-    |--------------------------------------------------------------------------
-    |
-    | Set an array of trusted proxies, so Laravel knows to grab the client's
-    | information via the X-Forwarded-* headers.
-    |
-    | To trust all proxies, use the value '*':
-    |
-    | 'proxies' => '*'
-    |
-    |
-    | To trust only specific proxies (recommended), set an array of those
-    | proxies' IP addresses:
-    |
-    | 'proxies' => array('192.168.1.1', '192.168.1.2')
-    |
-    |
-    | Or use CIDR notation:
-    |
-    | 'proxies' => array('192.168.12.0/23')
-    |
-    */
+     * Set trusted proxy IP addresses.
+     *
+     * Both IPv4 and IPv6 addresses are
+     * supported, along with CIDR notation.
+     *
+     * The "*" character is syntactic sugar
+     * within TrustedProxy to trust any proxy;
+     * a requirement when you cannot know the address
+     * of your proxy (e.g. if using Rackspace balancers).
+     */
+    'proxies' => [
+        '192.168.1.10',
+    ],
 
-    'proxies' => array(
-        '10.1.28.234'
-    ),
+    /*
+     * Or, to trust all proxies, uncomment this:
+     */
+     # 'proxies' => '*',
 
-);
+    /*
+     * Default Header Names
+     *
+     * Change these if the proxy does
+     * not send the default header names.
+     *
+     * Note that headers such as X-Forwarded-For
+     * are transformed to HTTP_X_FORWARDED_FOR format.
+     *
+     * The following are Symfony defaults, found in
+     * \Symfony\Component\HttpFoundation\Request::$trustedHeaders
+     */
+    'headers' => [
+        \Illuminate\Http\Request::HEADER_CLIENT_IP    => 'X_FORWARDED_FOR',
+        \Illuminate\Http\Request::HEADER_CLIENT_HOST  => 'X_FORWARDED_HOST',
+        \Illuminate\Http\Request::HEADER_CLIENT_PROTO => 'X_FORWARDED_PROTO',
+        \Illuminate\Http\Request::HEADER_CLIENT_PORT  => 'X_FORWARDED_PORT',
+    ]
+];
 ```
 
-In the example above, we are pretending we have a load balancer or other proxy which lives at `10.1.28.234`.
+In the example above, we are pretending we have a load balancer or other proxy which lives at `192.168.1.10`.
 
 **Note:** If you use Rackspace, Amazon AWS or other PaaS "cloud" services which provide load balancers, the IP adddress of the load balancer *may not be known*. This means that every IP address would need to be trusted.
 
-**In that case, you can set the 'proxies' variable to '*':**
+**In that case, you can set the 'proxies' variable to include '*':**
 
 ```php
 <?php
-return array(
 
-    /*
-    |--------------------------------------------------------------------------
-    | Trusted Proxies
-    |--------------------------------------------------------------------------
-    |
-    | Set an array of trusted proxies, so Laravel knows to grab the client's
-    | information via the X-Forwarded-* headers.
-    |
-    | To trust all proxies, use the value '*':
-    |
-    | 'proxies' => '*'
-    |
-    |
-    | To trust only specific proxies (recommended), set an array of those
-    | proxies' IP addresses:
-    |
-    | 'proxies' => array('192.168.1.1', '192.168.1.2')
-    |
-    |
-    | Or use CIDR notation:
-    |
-    | 'proxies' => array('192.168.12.0/23')
-    |
-    */
+return [
 
-    'proxies' => '*',
+     'proxies' => '*',
 
-);
+];
 ```
 
 Using `*` will tell Laravel to trust all IP addresses as a proxy.
 
-### CIDR Notation
+#### Changing X-Forwarded-* Header Names
+
+By default, the underlying Symfony `Request` class expects the following headers to be sent from a proxy:
+
+* **X-Forwarded-For**
+* **X-Forwarded-Host**
+* **X-Forwarded-Proto**
+* **X-Forwarded-Port**
+
+Some proxies may send slightly different headers. In those cases, you can tell the Symfony `Request` class what those headers are named.
+
+For example, HAProxy may send an `X-Forwarded-Scheme` header rather than `X-Forwarded-Proto`. We can adjust Laravel to fix this with the following configuration:
+
+```php
+<?php
+
+return [
+
+    'headers' => [
+        \Illuminate\Http\Request::HEADER_CLIENT_PROTO => 'X_FORWARDED_SCHEME',
+    ]
+
+];
+```
+
+And voilà, our application will now know what to do with the `X-Forwarded-Scheme` header.
+
+> Don't worry about the defaults being `IN_THIS_FORMAT`, while we set the headers `In-This-Format`. It all gets normalized under the hood. Symfony's HTTP classes are the bomb 💥.
+
+## CIDR Notation
 
 Symfony will accept [CIDR](http://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing "this is confusing as shit") [notation](http://compnetworking.about.com/od/workingwithipaddresses/a/cidr_notation.htm "seriously, wtf bitwise math") for configuring trusted proxies as well. This means you can set trusted proxies to address ranges such as `192.168.12.0/23`.
 
@@ -189,6 +265,7 @@ We can work around those issues by listening for the `X-Forwarded-*` headers. Th
 Common headers included are:
 
 * **X-Forwarded-For** - The IP address of the client
+* **X-Forwarded-Host** - The hostname used to access the site in the browser
 * **X-Forwarded-Proto** - The schema/protocol (http/https) used by the client
 * **X-Forwarded-Port** - The port used by the client (typically 80 or 443)
 
