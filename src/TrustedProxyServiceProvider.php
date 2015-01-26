@@ -13,8 +13,7 @@ class TrustedProxyServiceProvider extends ServiceProvider {
      */
     public function register()
     {
-        $filePath = realpath(dirname(__FILE__));
-        $packageConfigFileSrc = $filePath.'/trusted-proxy.php';
+        $packageConfigFileSrc = __DIR__.'/trusted-proxy.php';
         $packageConfigFileDest = base_path('config/trusted-proxy.php');
 
         $this->publishes([

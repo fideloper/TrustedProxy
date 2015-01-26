@@ -8,14 +8,14 @@
 
 **This branch will not be released until Laravel 5 is released.**
 
-Laravel 5 has a much nicer system for Middleware. This package now makes use of that the Laravel HTTP Kernel.
+Laravel 5 has a much nicer system for Middleware, which this package now takes advantage of.
 
 New features include:
 
-1. TrustedProxies are now set as an HTTP Middleware (which makes more logical sense than a ServiceProvider. If you're unsure what that means, remember to "Just Trust Fideloper™").
-2. You can now set the trusted header names. This is useful for proxies that don't use the usual `X-Forwarded-*` headers. See [issue #9](https://github.com/fideloper/TrustedProxy/issues/9) and [issue #7](https://github.com/fideloper/TrustedProxy/issues/7) for an example of that with Amazon's ELB.
+1. TrustedProxies are now set as in an HTTP Middleware, which makes more logical sense than the previous ServiceProvider. If you're unsure what that means, remember to "Just Trust Fideloper™".
+2. You can now set the trusted header names. This is useful for proxies that don't use the usual `X-Forwarded-*` headers. See [issue #9](https://github.com/fideloper/TrustedProxy/issues/9) and [issue #7](https://github.com/fideloper/TrustedProxy/issues/7) for an example and discussion of that.
 
-To use this along with Laravel 5, run the following from your Laravel 5 project directory:
+To use this with Laravel 5, run the following from your Laravel 5 project directory:
 
 ```bash
 composer require fideloper/proxy:dev-develop
@@ -54,7 +54,7 @@ Add the Service Provider:
 );
 ```
 
-Publish the config file:
+Publish the package config file to `config/trusted-proxy.php`:
 
 ```bash
 $ php artisan vendor:publish
@@ -72,7 +72,7 @@ Register the HTTP Middleware in file `app/Http/Kernel.php`:
 
 Then edit the published configuration file `config/trusted-proxy.php` as needed.
 
-The below will trust a proxy, such as a load balancer or web cache, at IP address 192.168.10.10:
+The below will trust a proxy, such as a load balancer or web cache, at IP address `192.168.10.10`:
 
 ```php
 <?php
@@ -82,7 +82,7 @@ return [
         '192.168.10.10',
     ],
 
-    // These are defaults set in the config:
+    // These are defaults already set in the config:
     'headers' => [
         \Illuminate\Http\Request::HEADER_CLIENT_IP    => 'X_FORWARDED_FOR',
         \Illuminate\Http\Request::HEADER_CLIENT_HOST  => 'X_FORWARDED_HOST',
@@ -92,7 +92,7 @@ return [
 ];
 ```
 
-## What's This Do?
+## What's All This Do?
 
 If your site sits behind a load balancer, gateway cache or other "reverse proxy", each web request has the potential to appear to always come from that proxy, rather than the client actually making requests on your site.
 
@@ -101,7 +101,7 @@ To fix that, this package allows you to take advantage of [Symfony's](https://gi
 
 ## Slightly Longer Installation Instructions
 
-Installation is typical of a Laravel 5 application:
+Installation is typical of a Laravel 5 package:
 
 1. Install the package
 2. Add the Service Provider
@@ -145,9 +145,9 @@ Edit `config/app.php` and add the provided Service Provider:
 
 ### Configure Trusted Proxies
 
-This package expects the `trusted-proxy.php` configuration file be available. You can do this by copying the package configuration file via the new Laravel 5 `artisan` command:
+This package expects the `trusted-proxy.php` configuration file be available at `/config/trusted-proxy.php`. You can do this by copying the package configuration file via the new Laravel 5 `artisan` command:
 
-```bash
+```bash`
 $ php artisan vendor:publish
 ```
 
@@ -203,7 +203,7 @@ In the example above, we are pretending we have a load balancer or other proxy w
 
 **Note:** If you use Rackspace, Amazon AWS or other PaaS "cloud" services which provide load balancers, the IP adddress of the load balancer *may not be known*. This means that every IP address would need to be trusted.
 
-**In that case, you can set the 'proxies' variable to include '*':**
+**In that case, you can set the 'proxies' variable to '*':**
 
 ```php
 <?php
@@ -219,7 +219,7 @@ Using `*` will tell Laravel to trust all IP addresses as a proxy.
 
 #### Changing X-Forwarded-* Header Names
 
-By default, the underlying Symfony `Request` class expects the following headers to be sent from a proxy:
+By default, the underlying Symfony `Request` class expects the following header names to be sent from a proxy:
 
 * **X-Forwarded-For**
 * **X-Forwarded-Host**
@@ -228,7 +228,7 @@ By default, the underlying Symfony `Request` class expects the following headers
 
 Some proxies may send slightly different headers. In those cases, you can tell the Symfony `Request` class what those headers are named.
 
-For example, HAProxy may send an `X-Forwarded-Scheme` header rather than `X-Forwarded-Proto`. We can adjust Laravel to fix this with the following configuration:
+For example, HAProxy may send an `X-Forwarded-Scheme` header rather than `X-Forwarded-Proto`. We can adjust Laravel (Well Actually™, the Symfony HTTP `Request` class) to fix this with the following configuration:
 
 ```php
 <?php
@@ -246,11 +246,11 @@ And voilà, our application will now know what to do with the `X-Forwarded-Schem
 
 > Don't worry about the defaults being `IN_THIS_FORMAT`, while we set the headers `In-This-Format`. It all gets normalized under the hood. Symfony's HTTP classes are the bomb 💥.
 
-## CIDR Notation
+## Do you even CIDR, brah?
 
 Symfony will accept [CIDR](http://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing "this is confusing as shit") [notation](http://compnetworking.about.com/od/workingwithipaddresses/a/cidr_notation.htm "seriously, wtf bitwise math") for configuring trusted proxies as well. This means you can set trusted proxies to address ranges such as `192.168.12.0/23`.
 
-Check that out [here](https://github.com/symfony/symfony/blob/2.4/src/Symfony/Component/HttpFoundation/Request.php#L787) and [here](https://github.com/symfony/symfony/blob/2.4/src/Symfony/Component/HttpFoundation/IpUtils.php#L56) to see how that is implemented in Symfony.
+Check that out [here](https://github.com/symfony/symfony/blob/2.4/src/Symfony/Component/HttpFoundation/Request.php) and [here](https://github.com/symfony/symfony/blob/2.4/src/Symfony/Component/HttpFoundation/IpUtils.php) to see how that is implemented in Symfony.
 
 ## Why Does This Matter?
 
