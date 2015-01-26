@@ -13,7 +13,7 @@ Laravel 5 has a much nicer system for Middleware. This package now makes use of 
 New features include:
 
 1. TrustedProxies are now set as an HTTP Middleware (which makes more logical sense than a ServiceProvider. If you're unsure what that means, remember to "Just Trust Fideloper™").
-2. You can now set the trusted header names. This is useful for proxies that don't use the usual `X-Forwarded-*` headers. See [issue #7](https://github.com/fideloper/TrustedProxy/issues/7) for an example of that with Amazon's ELB.
+2. You can now set the trusted header names. This is useful for proxies that don't use the usual `X-Forwarded-*` headers. See [issue #9](https://github.com/fideloper/TrustedProxy/issues/9) and [issue #7](https://github.com/fideloper/TrustedProxy/issues/7) for an example of that with Amazon's ELB.
 
 To use this along with Laravel 5, run the following from your Laravel 5 project directory:
 
