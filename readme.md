@@ -49,7 +49,7 @@ Add the Service Provider:
 
 ```php
 'providers' => array(
-    ... other providers ...
+    # other providers omitted
     Fideloper\Proxy\TrustedProxyServiceProvider,
 );
 ```
@@ -58,11 +58,9 @@ Publish the config file:
 
 ```bash
 $ php artisan vendor:publish
-Copied File [/vendor/fideloper/proxy/src/trusted-proxy.php] To [/config/trusted-proxy.php]
-Publishing Complete!
 ```
 
-Register the HTTP Middleware in file "app/Http/Kernel.php"
+Register the HTTP Middleware in file `app/Http/Kernel.php`:
 
 ```php
     protected $middleware = [
@@ -124,11 +122,13 @@ This package lives inside of Packagist and is therefore easily installable via C
 ```json
 {
     "require": {
-        "fideloper/proxy": "~2.0"
+        "fideloper/proxy": "dev-develop"
     }
 }
 ```
 Once that's added, run `$ composer update` to download the files.
+
+> If you want to develop on this, you'll need the dev dependencies, which you can get by adding the `--dev` flag to the `composer require` command.
 
 ### Add the Service Provider
 
@@ -139,7 +139,7 @@ Edit `config/app.php` and add the provided Service Provider:
 ```php
 'providers' => array(
     # other providers omitted
-    Fideloper\Proxy\ProxyServiceProvider,
+    Fideloper\Proxy\TrustedProxyServiceProvider,
 );
 ```
 
