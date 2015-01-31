@@ -3,8 +3,8 @@
 use Fideloper\Proxy\TrustProxies;
 use Illuminate\Http\Request;
 
-class TrustedProxyTest extends PHPUnit_Framework_TestCase {
-
+class TrustedProxyTest extends PHPUnit_Framework_TestCase
+{
     /**
      * Test that Symfony does indeed NOT trust X-Forwarded-*
      * headers when not given trusted proxies
@@ -28,7 +28,7 @@ class TrustedProxyTest extends PHPUnit_Framework_TestCase {
      * Test that Symfony DOES indeed trust X-Forwarded-*
      * headers when given trusted proxies
      *
-     * Again, this re-tests Symfony's Request class
+     * Again, this re-tests Symfony's Request class.
      */
     public function test_does_trust_trusted_proxy()
     {
@@ -50,14 +50,13 @@ class TrustedProxyTest extends PHPUnit_Framework_TestCase {
         $trustedProxy = $this->createTrustedProxy([], ['192.168.10.10']);
         $request = $this->createProxiedRequest();
 
-        $trustedProxy->handle($request, function($request)
-        {
+        $trustedProxy->handle($request, function ($request) {
             $this->assertEquals('173.174.200.38', $request->getClientIp(), 'Assert trusted proxy x-forwarded-for header used');
         });
     }
 
     /**
-     * Test renaming the X-Forwarded-For header
+     * Test renaming the X-Forwarded-For header.
      */
     public function test_can_rename_forwarded_for_header()
     {
@@ -67,33 +66,31 @@ class TrustedProxyTest extends PHPUnit_Framework_TestCase {
 
         $request = $this->createProxiedRequest(['HTTP_X_FIDELOPERS_WHACKY_HTTP_PROXY' => '173.174.200.38']);
 
-        $trustedProxy->handle($request, function($request)
-        {
+        $trustedProxy->handle($request, function ($request) {
             $this->assertEquals('173.174.200.38', $request->getClientIp(), 'Assert trusted proxy x-fidelopers-whacky-http-proxy header used');
         });
     }
 
     /**
-     * Test renaming *all* the headers
+     * Test renaming *all* the headers.
      */
     public function test_can_rename_forwarded_proto_header()
     {
         $trustedProxy = $this->createTrustedProxy([
-            \Illuminate\Http\Request::HEADER_CLIENT_IP    => 'x-fideloper-troll-for',
-            \Illuminate\Http\Request::HEADER_CLIENT_HOST  => 'x-fideloper-troll-host',
-            \Illuminate\Http\Request::HEADER_CLIENT_PROTO => 'x-fideloper-troll-proto',
-            \Illuminate\Http\Request::HEADER_CLIENT_PORT  => 'x-fideloper-troll-port',
+            Request::HEADER_CLIENT_IP    => 'x-fideloper-troll-for',
+            Request::HEADER_CLIENT_HOST  => 'x-fideloper-troll-host',
+            Request::HEADER_CLIENT_PROTO => 'x-fideloper-troll-proto',
+            Request::HEADER_CLIENT_PORT  => 'x-fideloper-troll-port',
         ], ['192.168.10.10']);
 
         $request = $this->createProxiedRequest([
-            'HTTP_X_FIDELOPER_TROLL_FOR' => '173.174.200.38',
-            'HTTP_X_FIDELOPER_TROLL_HOST' => 'serversforhackers.com',
-            'HTTP_X_FIDELOPER_TROLL_PORT' => '443',
+            'HTTP_X_FIDELOPER_TROLL_FOR'   => '173.174.200.38',
+            'HTTP_X_FIDELOPER_TROLL_HOST'  => 'serversforhackers.com',
+            'HTTP_X_FIDELOPER_TROLL_PORT'  => '443',
             'HTTP_X_FIDELOPER_TROLL_PROTO' => 'https',
         ]);
 
-        $trustedProxy->handle($request, function($request)
-        {
+        $trustedProxy->handle($request, function ($request) {
             $this->assertEquals('173.174.200.38', $request->getClientIp(), 'Assert trusted proxy x-fideloper-troll-for header used');
             $this->assertEquals('https', $request->getScheme(), 'Assert trusted proxy x-fideloper-troll-proto header used');
             $this->assertEquals('serversforhackers.com', $request->getHost(), 'Assert trusted proxy x-fideloper-troll-host header used');
@@ -102,12 +99,13 @@ class TrustedProxyTest extends PHPUnit_Framework_TestCase {
     }
 
     /**
-     * Fake an HTTP request by generating a Symfony Request object
+     * Fake an HTTP request by generating a Symfony Request object.
      *
      * @param array $serverOverRides
+     *
      * @return \Symfony\Component\HttpFoundation\Request
      */
-    protected function createProxiedRequest($serverOverRides=[])
+    protected function createProxiedRequest($serverOverRides = [])
     {
         // Add some X-Forwarded headers and over-ride
         // defaults, simulating a request made over a proxy
@@ -123,32 +121,32 @@ class TrustedProxyTest extends PHPUnit_Framework_TestCase {
 
         // Create a fake request made over "http", one that we'd get over a proxy
         // which is likely something like this:
-        $request = Request::create('http://localhost:8888/tag/proxy','GET',[],[],[],$serverOverRides,null);
+        $request = Request::create('http://localhost:8888/tag/proxy', 'GET', [], [], [], $serverOverRides, null);
 
         return $request;
     }
 
     /**
-     * Retrieve a TrustProxies object, with dependencies mocked
+     * Retrieve a TrustProxies object, with dependencies mocked.
      *
-     * @param $trustedHeaders
-     * @param $trustedProxies
-     * @return TrustProxies
+     * @param array $trustedHeaders
+     * @param array $trustedProxies
+     *
+     * @return \Fideloper\Proxy\TrustProxies
      */
     protected function createTrustedProxy($trustedHeaders, $trustedProxies)
     {
         // Mock TrustProxies dependencies and calls for config values
-        $app = Mockery::mock('Illuminate\Contracts\Foundation\Application');
         $config = Mockery::mock('Illuminate\Contracts\Config\Repository')
             ->shouldReceive('get')
-            ->with('trusted-proxy.headers')
+            ->with('trustedproxy.headers')
             ->andReturn($trustedHeaders)
             ->shouldReceive('get')
-            ->with('trusted-proxy.proxies')
+            ->with('trustedproxy.proxies')
             ->andReturn($trustedProxies)
             ->getMock();
 
-        return new TrustProxies($app, $config);
+        return new TrustProxies($config);
     }
 
 }
