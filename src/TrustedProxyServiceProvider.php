@@ -1,10 +1,24 @@
-<?php  namespace Fideloper\Proxy;
+<?php
+
+namespace Fideloper\Proxy;
 
 use Illuminate\Support\ServiceProvider;
 
-class TrustedProxyServiceProvider extends ServiceProvider {
+class TrustedProxyServiceProvider extends ServiceProvider
+{
+    /**
+     * Boot the service provider.
+     *
+     * @return void
+     */
+    public function boot()
+    {
+        $source = realpath(__DIR__.'/../config/trustedproxy.php');
 
-    protected $defer = false;
+        $this->publishes([$source => config_path('trustedproxy.php')]);
+
+        $this->mergeConfigFrom($source, 'trustedproxy');
+    }
 
     /**
      * Register the service provider.
@@ -13,11 +27,6 @@ class TrustedProxyServiceProvider extends ServiceProvider {
      */
     public function register()
     {
-        $packageConfigFileSrc = __DIR__.'/trusted-proxy.php';
-        $packageConfigFileDest = config_path('trusted-proxy.php');
-
-        $this->publishes([
-            $packageConfigFileSrc => $packageConfigFileDest,
-        ]);
+        //
     }
 }
