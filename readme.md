@@ -4,9 +4,9 @@
 
 [![Total Downloads](https://poser.pugx.org/fideloper/proxy/downloads.png)](https://packagist.org/packages/fideloper/proxy)
 
-## ~In Development~: Updated for Laravel 5.
+## Updated for Laravel 5.
 
-**This branch will not be released until Laravel 5 is released.**
+> You can still use this for Version 4 of Laravel. See the latest v2 tag of this repository, which is compatible with version 4 of Laravel.
 
 Laravel 5 has a much nicer system for Middleware, which this package now takes advantage of.
 
@@ -18,7 +18,7 @@ New features include:
 To use this with Laravel 5, run the following from your Laravel 5 project directory:
 
 ```bash
-composer require fideloper/proxy:dev-develop
+composer require fideloper/proxy:~3.0
 ```
 
 Or of course you can edit your `composer.json` file directly:
@@ -26,7 +26,7 @@ Or of course you can edit your `composer.json` file directly:
 ```json
 {
     "require": {
-        "fideloper/proxy": "dev-develop"
+        "fideloper/proxy": "~3.0"
     }
 }
 ```
@@ -42,7 +42,7 @@ This is useful if your web servers sit behind a load balancer, http cache, or ot
 Install Trusted Proxy:
 
 ```bash
-$ composer require fideloper/proxy:dev-develop
+$ composer require fideloper/proxy:~3.0
 ```
 
 Add the Service Provider:
@@ -67,7 +67,7 @@ Register the HTTP Middleware in file `app/Http/Kernel.php`:
         // Illuminate middlewares omitted for brevity
 
         'Fideloper\Proxy\TrustProxies',
-    ];
+
 ```
 
 Then edit the published configuration file `config/trusted-proxy.php` as needed.
