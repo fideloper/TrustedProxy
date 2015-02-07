@@ -70,7 +70,7 @@ Register the HTTP Middleware in file `app/Http/Kernel.php`:
 
 ```
 
-Then edit the published configuration file `config/trusted-proxy.php` as needed.
+Then edit the published configuration file `config/trustedproxy.php` as needed.
 
 The below will trust a proxy, such as a load balancer or web cache, at IP address `192.168.10.10`:
 
@@ -115,14 +115,14 @@ This package lives inside of Packagist and is therefore easily installable via C
 
 **Method One:**
 
-    $ composer require fideloper/proxy:dev-develop
+    $ composer require fideloper/proxy:~3.0
 
 **Method Two:**
 
 ```json
 {
     "require": {
-        "fideloper/proxy": "dev-develop"
+        "fideloper/proxy": "~3.0"
     }
 }
 ```
@@ -151,7 +151,7 @@ This package expects the `trusted-proxy.php` configuration file be available at 
 $ php artisan vendor:publish
 ```
 
-Once that's finished, there will be a new configuration file to edit at `config/trusted-proxy.php`:
+Once that's finished, there will be a new configuration file to edit at `config/trustedproxy.php`:
 
 ```php
 <?php
