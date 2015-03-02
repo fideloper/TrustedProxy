@@ -54,7 +54,7 @@ Add the Service Provider:
 );
 ```
 
-Publish the package config file to `config/trusted-proxy.php`:
+Publish the package config file to `config/trustedproxy.php`:
 
 ```bash
 $ php artisan vendor:publish
@@ -145,7 +145,7 @@ Edit `config/app.php` and add the provided Service Provider:
 
 ### Configure Trusted Proxies
 
-This package expects the `trusted-proxy.php` configuration file be available at `/config/trusted-proxy.php`. You can do this by copying the package configuration file via the new Laravel 5 `artisan` command:
+This package expects the `trustedproxy.php` configuration file be available at `/config/trustedproxy.php`. You can do this by copying the package configuration file via the new Laravel 5 `artisan` command:
 
 ```bash`
 $ php artisan vendor:publish
