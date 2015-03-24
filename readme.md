@@ -143,7 +143,17 @@ Edit `config/app.php` and add the provided Service Provider:
 );
 ```
 
-### Add the middleware
+### Publish the configuration file
+
+This package expects the `trustedproxy.php` configuration file be available at `/config/trustedproxy.php`. You can do this by copying the package configuration file via the new Laravel 5 `artisan` command:
+
+```bash`
+$ php artisan vendor:publish
+```
+
+Once that's finished, there will be a new configuration file to edit at `config/trustedproxy.php`.
+
+### Register the middleware
 
 Edit `app/Http/Kernel.php` and add the provided Middleware:
 
@@ -157,13 +167,7 @@ Edit `app/Http/Kernel.php` and add the provided Middleware:
 
 ### Configure Trusted Proxies
 
-This package expects the `trustedproxy.php` configuration file be available at `/config/trustedproxy.php`. You can do this by copying the package configuration file via the new Laravel 5 `artisan` command:
-
-```bash`
-$ php artisan vendor:publish
-```
-
-Once that's finished, there will be a new configuration file to edit at `config/trustedproxy.php`:
+Edit the newly published `config/trustedproxy.php`:
 
 ```php
 <?php
