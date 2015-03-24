@@ -143,6 +143,18 @@ Edit `config/app.php` and add the provided Service Provider:
 );
 ```
 
+### Add the middleware
+
+Edit `app/Http/Kernel.php` and add the provided Middleware:
+
+```php
+    protected $middleware = [
+        // Illuminate middlewares omitted for brevity
+
+        'Fideloper\Proxy\TrustProxies',
+
+```
+
 ### Configure Trusted Proxies
 
 This package expects the `trustedproxy.php` configuration file be available at `/config/trustedproxy.php`. You can do this by copying the package configuration file via the new Laravel 5 `artisan` command:
