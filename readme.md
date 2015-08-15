@@ -291,7 +291,7 @@ Laravel does not have a simple configuration option for "trusting" proxies out o
 
 ### Proxies in Symfony and Laravel
 
-In order for Laravel to check for the forwarded IP address, schema/protocol  and port, we need tell Laravel the IP addresses of our proxies, so the application knows to "trust" them. If it finds the IP address received is a trusted IP, it will look for the `X-Forwarded-*` headers. Otherwise, it will ignore.
+In order for Laravel to check for the forwarded IP address, schema/protocol and port, we need tell Laravel the IP addresses of our proxies, so the application knows to "trust" them. If it finds the IP address received is a trusted IP, it will look for the `X-Forwarded-*` headers. Otherwise, it will ignore.
 
 If we do not tell Laravel what the IP address of our proxy (or proxies) is, it will ignore it for security reasons.
 
