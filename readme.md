@@ -35,7 +35,7 @@ Or of course, you can edit your `composer.json` file directly:
 
 Setting a trusted proxy allows for correct URL generation, redirecting, session handling and logging in Laravel when behind a proxy.
 
-This is useful if your web servers sit behind a load balancer, HTTP cache, or another intermediary (reverse) proxy.
+This is useful if your web servers sit behind a load balancer, HTTP cache, or other intermediary (reverse) proxy.
 
 ## TL;DR Setup:
 
