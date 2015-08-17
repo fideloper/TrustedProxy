@@ -21,7 +21,7 @@ To use this with Laravel 5, run the following from your Laravel 5 project direct
 composer require fideloper/proxy:~3.0
 ```
 
-Or of course you can edit your `composer.json` file directly:
+Or of course, you can edit your `composer.json` file directly:
 
 ```json
 {
@@ -35,7 +35,7 @@ Or of course you can edit your `composer.json` file directly:
 
 Setting a trusted proxy allows for correct URL generation, redirecting, session handling and logging in Laravel when behind a proxy.
 
-This is useful if your web servers sit behind a load balancer, http cache, or other intermediary (reverse) proxy.
+This is useful if your web servers sit behind a load balancer, HTTP cache, or other intermediary (reverse) proxy.
 
 ## TL;DR Setup:
 
@@ -217,7 +217,7 @@ return [
 
 In the example above, we are pretending we have a load balancer or other proxy which lives at `192.168.1.10`.
 
-**Note:** If you use Rackspace, Amazon AWS or other PaaS "cloud" services which provide load balancers, the IP adddress of the load balancer *may not be known*. This means that every IP address would need to be trusted.
+**Note:** If you use Rackspace, Amazon AWS or other PaaS "cloud" services which provide load balancers, the IP address of the load balancer *may not be known*. This means that every IP address would need to be trusted.
 
 **In that case, you can set the 'proxies' variable to '*':**
 
@@ -272,7 +272,7 @@ Check that out [here](https://github.com/symfony/symfony/blob/2.4/src/Symfony/Co
 
 If your site is behind a proxy such as a load balancer, your web application may have some of the following issues:
 
-1. Redirects and PHP-generated URLs may be inaccurate in terms of web address, protocol and/or port.
+1. Redirects and PHP-generated URLs may be inaccurate in terms of its web address, protocol and/or port.
 2. Unique sessions might not be created for each user, leading to possible access to incorrect accounts, or an inability for a user to log in at all
 3. Logging or other data-collection processes data may appear to come from one location (the proxy itself) leaving you with no way to distinguish between traffic/actions taken by individual clients.
 
@@ -291,7 +291,7 @@ Laravel does not have a simple configuration option for "trusting" proxies out o
 
 ### Proxies in Symfony and Laravel
 
-In order for Laravel to check for the forwarded IP address, schema/protocol  and port, we need tell Laravel the IP addresses of our proxies, so the application knows to "trust" them. If it finds the IP address received is a trusted IP, it will look for the `X-Forwarded-*` headers. Otherwise, it will ignore.
+In order for Laravel to check for the forwarded IP address, schema/protocol and port, we need tell Laravel the IP addresses of our proxies, so the application knows to "trust" them. If it finds the IP address received is a trusted IP, it will look for the `X-Forwarded-*` headers. Otherwise, it will ignore.
 
 If we do not tell Laravel what the IP address of our proxy (or proxies) is, it will ignore it for security reasons.
 
