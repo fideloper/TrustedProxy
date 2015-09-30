@@ -42,7 +42,7 @@ class TrustProxies implements Middleware
             $request->setTrustedHeaderName($headerKey, $headerName);
         }
 
-        $request->setTrustedProxies($this->getTrustedProxies($request->getClientIps()));
+        $request->setTrustedProxies($this->getTrustedProxies());
 
         return $next($request);
     }
@@ -50,18 +50,15 @@ class TrustProxies implements Middleware
     /**
      * Return an array of trusted proxy IP addresses.
      *
-     * @param array $clientIpAddresses Array of client IP addresses retrieved
-     *                                 *prior* to setting trusted proxy
-     *
      * @return array
      */
-    protected function getTrustedProxies(array $clientIpAddresses = [])
+    protected function getTrustedProxies()
     {
         $trustedProxies = $this->config->get('trustedproxy.proxies');
 
         // To trust all proxies, we set trusted proxies to all IP addresses.
         if ($trustedProxies === '*') {
-            return $clientIpAddresses;
+            return ['0.0.0.0/0'];
         }
 
         return (array) $trustedProxies;

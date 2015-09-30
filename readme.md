@@ -233,6 +233,18 @@ return [
 
 Using `*` will tell Laravel to trust all IP addresses as a proxy.
 
+This is equivalent to allowing all IP addresses like so:
+
+```php
+<?php
+
+return [
+
+     'proxies' => ['0.0.0.0/0'],
+
+];
+```
+
 #### Changing X-Forwarded-* Header Names
 
 By default, the underlying Symfony `Request` class expects the following header names to be sent from a proxy:
@@ -264,7 +276,7 @@ And voilà, our application will now know what to do with the `X-Forwarded-Schem
 
 ## Do you even CIDR, brah?
 
-Symfony will accept [CIDR](http://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing "this is confusing as shit") [notation](http://compnetworking.about.com/od/workingwithipaddresses/a/cidr_notation.htm "seriously, wtf bitwise math") for configuring trusted proxies as well. This means you can set trusted proxies to address ranges such as `192.168.12.0/23`.
+Symfony will accept [CIDR](http://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing "this is confusing as shit") [notation](http://compnetworking.about.com/od/workingwithipaddresses/a/cidr_notation.htm "seriously, wtf bitwise math") for configuring trusted proxies as well. This means you can set trusted proxies to address ranges (netmask) such as `192.168.12.0/23`.
 
 Check that out [here](https://github.com/symfony/symfony/blob/2.4/src/Symfony/Component/HttpFoundation/Request.php) and [here](https://github.com/symfony/symfony/blob/2.4/src/Symfony/Component/HttpFoundation/IpUtils.php) to see how that is implemented in Symfony.
 
