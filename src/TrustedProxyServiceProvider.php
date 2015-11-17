@@ -15,7 +15,10 @@ class TrustedProxyServiceProvider extends ServiceProvider
     {
         $source = realpath(__DIR__.'/../config/trustedproxy.php');
 
-        $this->publishes([$source => config_path('trustedproxy.php')]);
+        // ! lumen doesn't support publishes
+        if (function_exists('config_path')) {
+            $this->publishes([$source => config_path('trustedproxy.php')]);
+        }
 
         $this->mergeConfigFrom($source, 'trustedproxy');
     }
