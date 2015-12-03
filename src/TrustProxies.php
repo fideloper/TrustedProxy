@@ -4,9 +4,8 @@ namespace Fideloper\Proxy;
 
 use Closure;
 use Illuminate\Contracts\Config\Repository;
-use Illuminate\Contracts\Routing\Middleware;
 
-class TrustProxies implements Middleware
+class TrustProxies
 {
     /**
      * The config repository instance.
