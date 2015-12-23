@@ -2,7 +2,9 @@
 
 namespace Fideloper\Proxy;
 
+use Illuminate\Foundation\Application as LaravelApplication;
 use Illuminate\Support\ServiceProvider;
+use Laravel\Lumen\Application as LumenApplication;
 
 class TrustedProxyServiceProvider extends ServiceProvider
 {
@@ -15,9 +17,10 @@ class TrustedProxyServiceProvider extends ServiceProvider
     {
         $source = realpath(__DIR__.'/../config/trustedproxy.php');
 
-        // ! lumen doesn't support publishes
-        if (function_exists('config_path')) {
+        if ($app instanceof LaravelApplication && $app->runningInConsole()) {
             $this->publishes([$source => config_path('trustedproxy.php')]);
+        } elseif ($app instanceof LumenApplication) {
+            $app->configure('trustedproxy');
         }
 
         $this->mergeConfigFrom($source, 'trustedproxy');
