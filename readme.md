@@ -266,7 +266,7 @@ And voilà, our application will now know what to do with the `X-Forwarded-Schem
 
 Symfony will accept [CIDR](http://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing "this is confusing as shit") [notation](http://compnetworking.about.com/od/workingwithipaddresses/a/cidr_notation.htm "seriously, wtf bitwise math") for configuring trusted proxies as well. This means you can set trusted proxies to address ranges such as `192.168.12.0/23`.
 
-Check that out [here](https://github.com/symfony/symfony/blob/2.4/src/Symfony/Component/HttpFoundation/Request.php) and [here](https://github.com/symfony/symfony/blob/2.4/src/Symfony/Component/HttpFoundation/IpUtils.php) to see how that is implemented in Symfony.
+Check that out [here](https://github.com/symfony/symfony/blob/3.0/src/Symfony/Component/HttpFoundation/Request.php) and [here](https://github.com/symfony/symfony/blob/3.0/src/Symfony/Component/HttpFoundation/IpUtils.php) to see how that is implemented in Symfony.
 
 ## Why Does This Matter?
 
