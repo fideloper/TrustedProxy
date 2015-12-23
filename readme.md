@@ -18,7 +18,7 @@ New features include:
 To use this with Laravel 5, run the following from your Laravel 5 project directory:
 
 ```bash
-composer require fideloper/proxy:~3.1
+composer require fideloper/proxy
 ```
 
 Or of course, you can edit your `composer.json` file directly:
@@ -26,7 +26,7 @@ Or of course, you can edit your `composer.json` file directly:
 ```json
 {
     "require": {
-        "fideloper/proxy": "~3.1"
+        "fideloper/proxy": "^3.1"
     }
 }
 ```
@@ -42,7 +42,7 @@ This is useful if your web servers sit behind a load balancer, HTTP cache, or ot
 Install Trusted Proxy:
 
 ```bash
-$ composer require fideloper/proxy:~3.1
+$ composer require fideloper/proxy
 ```
 
 Add the Service Provider:
@@ -115,14 +115,14 @@ This package lives inside of Packagist and is therefore easily installable via C
 
 **Method One:**
 
-    $ composer require fideloper/proxy:~3.1
+    $ composer require fideloper/proxy
 
 **Method Two:**
 
 ```json
 {
     "require": {
-        "fideloper/proxy": "~3.1"
+        "fideloper/proxy": "^3.1"
     }
 }
 ```
@@ -207,10 +207,10 @@ return [
      * \Symfony\Component\HttpFoundation\Request::$trustedHeaders
      */
     'headers' => [
-        \Illuminate\Http\Request::HEADER_CLIENT_IP    => 'X_FORWARDED_FOR',
-        \Illuminate\Http\Request::HEADER_CLIENT_HOST  => 'X_FORWARDED_HOST',
-        \Illuminate\Http\Request::HEADER_CLIENT_PROTO => 'X_FORWARDED_PROTO',
-        \Illuminate\Http\Request::HEADER_CLIENT_PORT  => 'X_FORWARDED_PORT',
+        Illuminate\Http\Request::HEADER_CLIENT_IP    => 'X_FORWARDED_FOR',
+        Illuminate\Http\Request::HEADER_CLIENT_HOST  => 'X_FORWARDED_HOST',
+        Illuminate\Http\Request::HEADER_CLIENT_PROTO => 'X_FORWARDED_PROTO',
+        Illuminate\Http\Request::HEADER_CLIENT_PORT  => 'X_FORWARDED_PORT',
     ]
 ];
 ```
@@ -252,7 +252,7 @@ For example, HAProxy may send an `X-Forwarded-Scheme` header rather than `X-Forw
 return [
 
     'headers' => [
-        \Illuminate\Http\Request::HEADER_CLIENT_PROTO => 'X_FORWARDED_SCHEME',
+        Illuminate\Http\Request::HEADER_CLIENT_PROTO => 'X_FORWARDED_SCHEME',
     ]
 
 ];
