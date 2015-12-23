@@ -18,7 +18,7 @@ New features include:
 To use this with Laravel 5, run the following from your Laravel 5 project directory:
 
 ```bash
-composer require fideloper/proxy:~3.0
+composer require fideloper/proxy:~3.1
 ```
 
 Or of course, you can edit your `composer.json` file directly:
@@ -26,7 +26,7 @@ Or of course, you can edit your `composer.json` file directly:
 ```json
 {
     "require": {
-        "fideloper/proxy": "~3.0"
+        "fideloper/proxy": "~3.1"
     }
 }
 ```
@@ -42,7 +42,7 @@ This is useful if your web servers sit behind a load balancer, HTTP cache, or ot
 Install Trusted Proxy:
 
 ```bash
-$ composer require fideloper/proxy:~3.0
+$ composer require fideloper/proxy:~3.1
 ```
 
 Add the Service Provider:
@@ -115,14 +115,14 @@ This package lives inside of Packagist and is therefore easily installable via C
 
 **Method One:**
 
-    $ composer require fideloper/proxy:~3.0
+    $ composer require fideloper/proxy:~3.1
 
 **Method Two:**
 
 ```json
 {
     "require": {
-        "fideloper/proxy": "~3.0"
+        "fideloper/proxy": "~3.1"
     }
 }
 ```
