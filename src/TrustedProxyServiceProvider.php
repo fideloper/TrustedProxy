@@ -17,10 +17,10 @@ class TrustedProxyServiceProvider extends ServiceProvider
     {
         $source = realpath(__DIR__.'/../config/trustedproxy.php');
 
-        if ($app instanceof LaravelApplication && $app->runningInConsole()) {
+        if ($this->app instanceof LaravelApplication && $this->app->runningInConsole()) {
             $this->publishes([$source => config_path('trustedproxy.php')]);
-        } elseif ($app instanceof LumenApplication) {
-            $app->configure('trustedproxy');
+        } elseif ($this->app instanceof LumenApplication) {
+            $this->app->configure('trustedproxy');
         }
 
         $this->mergeConfigFrom($source, 'trustedproxy');
