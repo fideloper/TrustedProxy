@@ -50,7 +50,7 @@ Add the Service Provider:
 ```php
 'providers' => array(
     # other providers omitted
-    'Fideloper\Proxy\TrustedProxyServiceProvider',
+    Fideloper\Proxy\TrustedProxyServiceProvider::class,
 );
 ```
 
@@ -139,7 +139,7 @@ Edit `config/app.php` and add the provided Service Provider:
 ```php
 'providers' => array(
     # other providers omitted
-    Fideloper\Proxy\TrustedProxyServiceProvider,
+    Fideloper\Proxy\TrustedProxyServiceProvider::class,
 );
 ```
 
