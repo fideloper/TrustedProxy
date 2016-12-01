@@ -122,6 +122,8 @@ class TrustedProxyTest extends PHPUnit_Framework_TestCase
         // Create a fake request made over "http", one that we'd get over a proxy
         // which is likely something like this:
         $request = Request::create('http://localhost:8888/tag/proxy', 'GET', [], [], [], $serverOverRides, null);
+        // Need to make sure these haven't already been set
+        $request->setTrustedProxies([]);
 
         return $request;
     }
