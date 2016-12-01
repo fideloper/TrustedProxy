@@ -9,18 +9,36 @@ return [
      * supported, along with CIDR notation.
      *
      * The "*" character is syntactic sugar
-     * within TrustedProxy to trust any proxy;
+     * within TrustedProxy to trust any proxy
+     * that connects directly to your server,
      * a requirement when you cannot know the address
      * of your proxy (e.g. if using Rackspace balancers).
+     *
+     * The "**" character is syntactic sugar within
+     * TrustedProxy to trust not just any proxy that
+     * connects directly to your server, but also
+     * proxies that connect to those proxies, and all
+     * the way back until you reach the original source
+     * IP. It will mean that $request->getClientIp()
+     * always gets the originating client IP, no matter
+     * how many proxies that client's request has
+     * subsequently passed through.
      */
     'proxies' => [
         '192.168.1.10',
     ],
 
     /*
-     * Or, to trust all proxies, uncomment this:
+     * Or, to trust all proxies that connect
+     * directly to your server, uncomment this:
      */
      # 'proxies' => '*',
+
+    /*
+     * Or, to trust ALL proxies, including those that
+     * are in a chain of fowarding, uncomment this:
+    */
+    # 'proxies' => '**',
 
     /*
      * Default Header Names
