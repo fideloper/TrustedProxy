@@ -56,6 +56,53 @@ class TrustedProxyTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * Test X-Forwarded-For header with multiple IP addresses
+     */
+    public function test_get_client_ips()
+    {
+        $trustedProxy = $this->createTrustedProxy([], ['192.168.10.10']);
+
+        $forwardedFor = [
+            '192.0.2.2',
+            '192.0.2.2, 192.0.2.199',
+            '192.0.2.2, 192.0.2.199, 99.99.99.99',
+            '192.0.2.2,192.0.2.199',
+        ];
+
+        foreach($forwardedFor as $forwardedForHeader) {
+            $request = $this->createProxiedRequest(['HTTP_X_FORWARDED_FOR' => $forwardedForHeader]);
+
+            $trustedProxy->handle($request, function ($request) use ($forwardedForHeader) {
+                $ips = $request->getClientIps();
+                $this->assertEquals('192.0.2.2', end($ips), 'Assert sets the '.$forwardedForHeader);
+            });
+        }
+    }
+
+    /**
+     * Test X-Forwarded-For header with multiple IP addresses, with some of those being trusted
+     */
+    public function test_get_client_ip_with_muliple_ip_addresses_some_of_which_are_trusted()
+    {
+        $trustedProxy = $this->createTrustedProxy([], ['192.168.10.10', '192.0.2.199']);
+
+        $forwardedFor = [
+            '192.0.2.2',
+            '192.0.2.2, 192.0.2.199',
+            '99.99.99.99, 192.0.2.2, 192.0.2.199',
+            '192.0.2.2,192.0.2.199',
+        ];
+
+        foreach($forwardedFor as $forwardedForHeader) {
+            $request = $this->createProxiedRequest(['HTTP_X_FORWARDED_FOR' => $forwardedForHeader]);
+
+            $trustedProxy->handle($request, function ($request) use ($forwardedForHeader) {
+                $this->assertEquals('192.0.2.2', $request->getClientIp(), 'Assert sets the '.$forwardedForHeader);
+            });
+        }
+    }
+
+    /**
      * Test renaming the X-Forwarded-For header.
      */
     public function test_can_rename_forwarded_for_header()
@@ -70,6 +117,7 @@ class TrustedProxyTest extends PHPUnit_Framework_TestCase
             $this->assertEquals('173.174.200.38', $request->getClientIp(), 'Assert trusted proxy x-fidelopers-whacky-http-proxy header used');
         });
     }
+
 
     /**
      * Test renaming *all* the headers.
