@@ -181,18 +181,36 @@ return [
      * supported, along with CIDR notation.
      *
      * The "*" character is syntactic sugar
-     * within TrustedProxy to trust any proxy;
+     * within TrustedProxy to trust any proxy
+     * that connects directly to your server,
      * a requirement when you cannot know the address
      * of your proxy (e.g. if using Rackspace balancers).
+     *
+     * The "**" character is syntactic sugar within
+     * TrustedProxy to trust not just any proxy that
+     * connects directly to your server, but also
+     * proxies that connect to those proxies, and all
+     * the way back until you reach the original source
+     * IP. It will mean that $request->getClientIp()
+     * always gets the originating client IP, no matter
+     * how many proxies that client's request has
+     * subsequently passed through.
      */
     'proxies' => [
         '192.168.1.10',
     ],
 
     /*
-     * Or, to trust all proxies, uncomment this:
+     * Or, to trust all proxies that connect
+     * directly to your server, uncomment this:
      */
      # 'proxies' => '*',
+
+    /*
+     * Or, to trust ALL proxies, including those that
+     * are in a chain of fowarding, uncomment this:
+    */
+    # 'proxies' => '**',
 
     /*
      * Default Header Names
@@ -207,10 +225,10 @@ return [
      * \Symfony\Component\HttpFoundation\Request::$trustedHeaders
      */
     'headers' => [
-        Illuminate\Http\Request::HEADER_CLIENT_IP    => 'X_FORWARDED_FOR',
-        Illuminate\Http\Request::HEADER_CLIENT_HOST  => 'X_FORWARDED_HOST',
-        Illuminate\Http\Request::HEADER_CLIENT_PROTO => 'X_FORWARDED_PROTO',
-        Illuminate\Http\Request::HEADER_CLIENT_PORT  => 'X_FORWARDED_PORT',
+        \Illuminate\Http\Request::HEADER_CLIENT_IP    => 'X_FORWARDED_FOR',
+        \Illuminate\Http\Request::HEADER_CLIENT_HOST  => 'X_FORWARDED_HOST',
+        \Illuminate\Http\Request::HEADER_CLIENT_PROTO => 'X_FORWARDED_PROTO',
+        \Illuminate\Http\Request::HEADER_CLIENT_PORT  => 'X_FORWARDED_PORT',
     ]
 ];
 ```
@@ -232,6 +250,27 @@ return [
 ```
 
 Using `*` will tell Laravel to trust all IP addresses as a proxy.
+
+However, if you are in the situation where, say, you have a Content Distribution Network (like Amazon CloudFront) that passes to load balancer (like Amazon ELB)
+then you may end up with a chain of unknown proxies forwarding from one to another. In that case, '*' above would only match
+the final proxy (the load balancer in this case) which means that calling `$request->getClientIp()` would return the IP address 
+of the next proxy in line (in this case one of the Content Distribution Network ips) rather than the original client IP.
+To always get the original client IP, you need to trust all the proxies in the route to your request. You can do this by:
+
+**In that case, you can set the 'proxies' variable to '**':**
+
+```php
+<?php
+
+return [
+
+     'proxies' => '**',
+
+];
+```
+
+Which will trust every single IP address. 
+
 
 #### Changing X-Forwarded-* Header Names
 
