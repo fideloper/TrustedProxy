@@ -15,7 +15,8 @@
     },
     "require-dev": {
         "illuminate/http": "~5.0",
-        "mockery/mockery": "~0.9.3"
+        "mockery/mockery": "~0.9.3",
+        "phpunit/phpunit": "^5.7"
     },
     "autoload": {
         "psr-4": {
