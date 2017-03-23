@@ -26,7 +26,7 @@ Or of course, you can edit your `composer.json` file directly:
 ```json
 {
     "require": {
-        "fideloper/proxy": "^3.2"
+        "fideloper/proxy": "^3.3"
     }
 }
 ```
@@ -122,7 +122,7 @@ This package lives inside of Packagist and is therefore easily installable via C
 ```json
 {
     "require": {
-        "fideloper/proxy": "^3.2"
+        "fideloper/proxy": "^3.3"
     }
 }
 ```
