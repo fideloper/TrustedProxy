@@ -22,6 +22,13 @@ class TrustProxies
     protected $proxies;
 
     /**
+     * The proxy header mappings.
+     *
+     * @var array
+     */
+    protected $headers;
+
+    /**
      * Create a new trusted proxies middleware instance.
      *
      * @param  \Illuminate\Contracts\Config\Repository $config
@@ -55,7 +62,7 @@ class TrustProxies
      */
     protected function setTrustedProxyIpAddresses($request)
     {
-        $trustedIps = $this->config->get('trustedproxy.proxies', $this->proxies);
+        $trustedIps = $this->proxies ?: $this->config->get('trustedproxy.proxies');
 
         // We only trust specific IP addresses
         if(is_array($trustedIps)) {
@@ -100,7 +107,8 @@ class TrustProxies
      */
     protected function setTrustedProxyHeaderNames($request)
     {
-        $trustedHeaderNames = $this->config->get('trustedproxy.headers');
+        $trustedHeaderNames = $this->headers ?: $this->config->get('trustedproxy.headers');
+
         if(!is_array($trustedHeaderNames)) { return; } // Leave the defaults
 
         foreach ($trustedHeaderNames as $headerKey => $headerName) {
