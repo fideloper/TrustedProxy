@@ -53,7 +53,7 @@ return [
      * \Symfony\Component\HttpFoundation\Request::$trustedHeaders
      */
     'headers' => [
-        (defined('Illuminate\Http\Request::HEADER_FORWARDED' ? Illuminate\Http\Request::HEADER_FORWARDED : 'header')) => 'FORWARDED',
+        (defined('Illuminate\Http\Request::HEADER_FORWARDED' ? Illuminate\Http\Request::HEADER_FORWARDED : 'forwarded')) => 'FORWARDED',
         Illuminate\Http\Request::HEADER_CLIENT_IP    => 'X_FORWARDED_FOR',
         Illuminate\Http\Request::HEADER_CLIENT_HOST  => 'X_FORWARDED_HOST',
         Illuminate\Http\Request::HEADER_CLIENT_PROTO => 'X_FORWARDED_PROTO',
