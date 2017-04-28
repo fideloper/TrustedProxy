@@ -4,6 +4,7 @@ namespace Fideloper\Proxy;
 
 use Closure;
 use Illuminate\Contracts\Config\Repository;
+use Illuminate\Http\Request;
 
 class TrustProxies
 {
@@ -50,6 +51,7 @@ class TrustProxies
      */
     public function handle($request, Closure $next)
     {
+        $request::setTrustedProxies([]);
         $this->setTrustedProxyHeaderNames($request);
         $this->setTrustedProxyIpAddresses($request);
         return $next($request);
@@ -60,39 +62,39 @@ class TrustProxies
      *
      * @param \Illuminate\Http\Request $request
      */
-    protected function setTrustedProxyIpAddresses($request)
+    protected function setTrustedProxyIpAddresses(Request $request)
     {
         $trustedIps = $this->proxies ?: $this->config->get('trustedproxy.proxies');
 
         // We only trust specific IP addresses
         if(is_array($trustedIps)) {
-            return $this->setTrustedProxyIpAddressesToSpecificIps($request, $trustedIps);
+            $this->setTrustedProxyIpAddressesToSpecificIps($request, $trustedIps);
         }
 
         // We trust any IP address that calls us, but not proxies further
         // up the forwarding chain.
         if ($trustedIps === '*') {
-            return $this->setTrustedProxyIpAddressesToTheCallingIp($request);
+            $this->setTrustedProxyIpAddressesToTheCallingIp($request);
         }
 
         // We trust all proxies. Those that call us, and those that are
         // further up the calling chain (e.g., where the X-FORWARDED-FOR
         // header has multiple IP addresses listed);
         if ($trustedIps === '**') {
-            return $this->setTrustedProxyIpAddressesToAllIps($request);
+            $this->setTrustedProxyIpAddressesToAllIps($request);
         }
     }
 
-    private function setTrustedProxyIpAddressesToSpecificIps($request, $trustedIps)
+    private function setTrustedProxyIpAddressesToSpecificIps(Request $request, $trustedIps)
     {
         $request->setTrustedProxies((array) $trustedIps);
     }
 
-    private function setTrustedProxyIpAddressesToTheCallingIp($request) {
+    private function setTrustedProxyIpAddressesToTheCallingIp(Request $request) {
         $request->setTrustedProxies($request->getClientIps());
     }
 
-    private function setTrustedProxyIpAddressesToAllIps($request)
+    private function setTrustedProxyIpAddressesToAllIps(Request $request)
     {
         // 0.0.0.0/0 is the CIDR for all ipv4 addresses
         // 2000:0:0:0:0:0:0:0/3 is the CIDR for all ipv6 addresses currently
