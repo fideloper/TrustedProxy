@@ -57,7 +57,7 @@ Add the Service Provider:
 Publish the package config file to `config/trustedproxy.php`:
 
 ```bash
-$ php artisan vendor:publish
+$ php artisan vendor:publish --provider="Fideloper\Proxy\TrustedProxyServiceProvider"
 ```
 
 Register the HTTP Middleware in file `app/Http/Kernel.php`:
@@ -148,7 +148,7 @@ Edit `config/app.php` and add the provided Service Provider:
 This package expects the `trustedproxy.php` configuration file be available at `/config/trustedproxy.php`. You can do this by copying the package configuration file via the new Laravel 5 `artisan` command:
 
 ```bash
-$ php artisan vendor:publish
+$ php artisan vendor:publish --provider="Fideloper\Proxy\TrustedProxyServiceProvider"
 ```
 
 Once that's finished, there will be a new configuration file to edit at `config/trustedproxy.php`.
