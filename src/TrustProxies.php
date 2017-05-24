@@ -118,4 +118,13 @@ class TrustProxies
             $request->setTrustedHeaderName($headerKey, $headerName);
         }
     }
+
+    /**
+     * Retrieve trusted header names
+     * @return mixed
+     */
+    protected function getTrustedHeaderNames()
+    {
+        return $this->headers ?: $this->config->get('trustedproxy.headers');
+    }
 }
