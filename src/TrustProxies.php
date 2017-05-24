@@ -86,31 +86,45 @@ class TrustProxies
         }
     }
 
+    /**
+     * We specify the IP addresses to trust explicitly
+     * @param $request
+     * @param $trustedIps
+     */
     private function setTrustedProxyIpAddressesToSpecificIps($request, $trustedIps)
     {
-        $request->setTrustedProxies((array) $trustedIps);
+        $request->setTrustedProxies((array) $trustedIps, $this->getTrustedHeaderNames());
     }
 
-    private function setTrustedProxyIpAddressesToTheCallingIp($request) {
-        $request->setTrustedProxies($request->getClientIps());
+    /**
+     * We set the trusted proxy to be the first IP addresses received
+     * @param $request
+     */
+    private function setTrustedProxyIpAddressesToTheCallingIp($request)
+    {
+        $request->setTrustedProxies($request->getClientIps(), $this->getTrustedHeaderNames());
     }
 
+    /**
+     * Trust all IP Addresses
+     * @param $request
+     */
     private function setTrustedProxyIpAddressesToAllIps($request)
     {
         // 0.0.0.0/0 is the CIDR for all ipv4 addresses
         // 2000:0:0:0:0:0:0:0/3 is the CIDR for all ipv6 addresses currently
         // allocated http://www.iana.org/assignments/ipv6-unicast-address-assignments/ipv6-unicast-address-assignments.xhtml
-        $request->setTrustedProxies(['0.0.0.0/0', '2000:0:0:0:0:0:0:0/3']);
+        $request->setTrustedProxies(['0.0.0.0/0', '2000:0:0:0:0:0:0:0/3'], $this->getTrustedHeaderNames());
     }
 
     /**
-     * Set the trusted header names based on teh content of trustedproxy.headers
-     *
+     * Set the trusted header names based on the content of trustedproxy.headers
+     * Note: Depreciated in Symfony 3.3+, but available for backwards compatibility
      * @param \Illuminate\Http\Request $request
      */
     protected function setTrustedProxyHeaderNames($request)
     {
-        $trustedHeaderNames = $this->headers ?: $this->config->get('trustedproxy.headers');
+        $trustedHeaderNames = $this->getTrustedHeaderNames();
 
         if(!is_array($trustedHeaderNames)) { return; } // Leave the defaults
 
