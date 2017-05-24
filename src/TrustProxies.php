@@ -71,6 +71,9 @@ class TrustProxies
 
         // We trust any IP address that calls us, but not proxies further
         // up the forwarding chain.
+        // todo: Determine if this should only trust the first IP address
+        //       Currently it trusts the entire chain (array of IPs),
+        //        potentially making the "**" convention redundant.
         if ($trustedIps === '*') {
             return $this->setTrustedProxyIpAddressesToTheCallingIp($request);
         }
