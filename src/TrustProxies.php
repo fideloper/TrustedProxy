@@ -134,8 +134,8 @@ class TrustProxies
     }
 
     /**
-     * Retrieve trusted header names
-     * @return mixed
+     * Retrieve trusted header names, falling back to defaults if config not set
+     * @return array Proxy header names to use
      */
     protected function getTrustedHeaderNames()
     {
