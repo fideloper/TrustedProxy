@@ -84,8 +84,30 @@ return [
 
     // These are defaults already set in the config:
     'headers' => [
+        (defined('Illuminate\Http\Request::HEADER_FORWARDED') ? Illuminate\Http\Request::HEADER_FORWARDED : 'forwarded') => 'FORWARDED',
         \Illuminate\Http\Request::HEADER_CLIENT_IP    => 'X_FORWARDED_FOR',
         \Illuminate\Http\Request::HEADER_CLIENT_HOST  => 'X_FORWARDED_HOST',
+        \Illuminate\Http\Request::HEADER_CLIENT_PROTO => 'X_FORWARDED_PROTO',
+        \Illuminate\Http\Request::HEADER_CLIENT_PORT  => 'X_FORWARDED_PORT',
+    ]
+];
+```
+
+Note: If you're using AWS Elastic Load Balancing or Heroku, the FORWARDED and X_FORWARDED_HOST headers should be set to null as they are currently unsupported there.
+
+```php
+<?php
+
+return [
+    'proxies' => [
+        '192.168.10.10',
+    ],
+
+    // These are defaults already set in the config:
+    'headers' => [
+        (defined('Illuminate\Http\Request::HEADER_FORWARDED') ? Illuminate\Http\Request::HEADER_FORWARDED : 'forwarded') => null,
+        \Illuminate\Http\Request::HEADER_CLIENT_IP    => 'X_FORWARDED_FOR',
+        \Illuminate\Http\Request::HEADER_CLIENT_HOST  => null,
         \Illuminate\Http\Request::HEADER_CLIENT_PROTO => 'X_FORWARDED_PROTO',
         \Illuminate\Http\Request::HEADER_CLIENT_PORT  => 'X_FORWARDED_PORT',
     ]
@@ -208,7 +230,7 @@ return [
 
     /*
      * Or, to trust ALL proxies, including those that
-     * are in a chain of fowarding, uncomment this:
+     * are in a chain of forwarding, uncomment this:
     */
     # 'proxies' => '**',
 
@@ -223,12 +245,22 @@ return [
      *
      * The following are Symfony defaults, found in
      * \Symfony\Component\HttpFoundation\Request::$trustedHeaders
+     *
+     * You may optionally set headers to 'null' here if you'd like
+     * for them to be considered untrusted instead. Ex:
+     *
+     * Illuminate\Http\Request::HEADER_CLIENT_HOST  => null,
+     * 
+     * WARNING: If you're using AWS Elastic Load Balancing or Heroku,
+     * the FORWARDED and X_FORWARDED_HOST headers should be set to null 
+     * as they are currently unsupported there.
      */
     'headers' => [
-        \Illuminate\Http\Request::HEADER_CLIENT_IP    => 'X_FORWARDED_FOR',
-        \Illuminate\Http\Request::HEADER_CLIENT_HOST  => 'X_FORWARDED_HOST',
-        \Illuminate\Http\Request::HEADER_CLIENT_PROTO => 'X_FORWARDED_PROTO',
-        \Illuminate\Http\Request::HEADER_CLIENT_PORT  => 'X_FORWARDED_PORT',
+        (defined('Illuminate\Http\Request::HEADER_FORWARDED') ? Illuminate\Http\Request::HEADER_FORWARDED : 'forwarded') => 'FORWARDED',
+        Illuminate\Http\Request::HEADER_CLIENT_IP    => 'X_FORWARDED_FOR',
+        Illuminate\Http\Request::HEADER_CLIENT_HOST  => 'X_FORWARDED_HOST',
+        Illuminate\Http\Request::HEADER_CLIENT_PROTO => 'X_FORWARDED_PROTO',
+        Illuminate\Http\Request::HEADER_CLIENT_PORT  => 'X_FORWARDED_PORT',
     ]
 ];
 ```
@@ -300,6 +332,24 @@ return [
 And voilà, our application will now know what to do with the `X-Forwarded-Scheme` header.
 
 > Don't worry about the defaults being `IN_THIS_FORMAT`, while we set the headers `In-This-Format`. It all gets normalized under the hood. Symfony's HTTP classes are the bomb 💥.
+
+Some services don't support specific headers, so you can also set these to `null` to untrust them. In particular, AWS ELB and Heroku don't support `FORWARDED` and `X_FORWARDED_HOST` so you should set these to `null` in order to prevent users from spoofing trusted IPs.
+
+```php
+<?php
+
+return [
+
+    'headers' => [
+        (defined('Illuminate\Http\Request::HEADER_FORWARDED') ? Illuminate\Http\Request::HEADER_FORWARDED : 'forwarded') => null,
+        \Illuminate\Http\Request::HEADER_CLIENT_IP    => 'X_FORWARDED_FOR',
+        \Illuminate\Http\Request::HEADER_CLIENT_HOST  => null,
+        \Illuminate\Http\Request::HEADER_CLIENT_PROTO => 'X_FORWARDED_PROTO',
+        \Illuminate\Http\Request::HEADER_CLIENT_PORT  => 'X_FORWARDED_PORT',
+    ]
+
+];
+```
 
 ## Do you even CIDR, brah?
 
