@@ -33,7 +33,7 @@ class TrustedProxyTest extends PHPUnit_Framework_TestCase
     public function test_does_trust_trusted_proxy()
     {
         $req = $this->createProxiedRequest();
-        $req->setTrustedProxies(['192.168.10.10']);
+        $req->setTrustedProxies(['192.168.10.10'], Request::HEADER_X_FORWARDED_ALL);
 
         $this->assertEquals('173.174.200.38', $req->getClientIp(), 'Assert trusted proxy x-forwarded-for header used');
         $this->assertEquals('https', $req->getScheme(), 'Assert trusted proxy x-forwarded-proto header used');
@@ -47,7 +47,7 @@ class TrustedProxyTest extends PHPUnit_Framework_TestCase
      */
     public function test_trusted_proxy_sets_trusted_proxies_with_wildcard()
     {
-        $trustedProxy = $this->createTrustedProxy([], '*');
+        $trustedProxy = $this->createTrustedProxy([Illuminate\Http\Request::HEADER_CLIENT_IP => 'X_FORWARDED_FOR'], '*');
         $request = $this->createProxiedRequest();
 
         $trustedProxy->handle($request, function ($request) {
@@ -63,7 +63,7 @@ class TrustedProxyTest extends PHPUnit_Framework_TestCase
      */
     public function test_trusted_proxy_sets_trusted_proxies()
     {
-        $trustedProxy = $this->createTrustedProxy([], ['192.168.10.10']);
+        $trustedProxy = $this->createTrustedProxy([Illuminate\Http\Request::HEADER_CLIENT_IP => 'X_FORWARDED_FOR'], ['192.168.10.10']);
         $request = $this->createProxiedRequest();
 
         $trustedProxy->handle($request, function ($request) {
@@ -76,7 +76,7 @@ class TrustedProxyTest extends PHPUnit_Framework_TestCase
      */
     public function test_get_client_ips()
     {
-        $trustedProxy = $this->createTrustedProxy([], ['192.168.10.10']);
+        $trustedProxy = $this->createTrustedProxy([Illuminate\Http\Request::HEADER_CLIENT_IP => 'X_FORWARDED_FOR'], ['192.168.10.10']);
 
         $forwardedFor = [
             '192.0.2.2',
@@ -100,7 +100,7 @@ class TrustedProxyTest extends PHPUnit_Framework_TestCase
      */
     public function test_get_client_ip_with_muliple_ip_addresses_some_of_which_are_trusted()
     {
-        $trustedProxy = $this->createTrustedProxy([], ['192.168.10.10', '192.0.2.199']);
+        $trustedProxy = $this->createTrustedProxy([Illuminate\Http\Request::HEADER_CLIENT_IP => 'X_FORWARDED_FOR'], ['192.168.10.10', '192.0.2.199']);
 
         $forwardedFor = [
             '192.0.2.2',
@@ -123,7 +123,7 @@ class TrustedProxyTest extends PHPUnit_Framework_TestCase
      */
     public function test_get_client_ip_with_muliple_ip_addresses_all_proxies_are_trusted()
     {
-        $trustedProxy = $this->createTrustedProxy([], '*');
+        $trustedProxy = $this->createTrustedProxy([Illuminate\Http\Request::HEADER_CLIENT_IP => 'X_FORWARDED_FOR'], '*');
 
         $forwardedFor = [
             '192.0.2.2',
@@ -146,7 +146,7 @@ class TrustedProxyTest extends PHPUnit_Framework_TestCase
      */
     public function test_get_client_ip_with_muliple_ip_addresses_all_proxies_and_all_forwarding_proxies_are_trusted()
     {
-        $trustedProxy = $this->createTrustedProxy([], '**');
+        $trustedProxy = $this->createTrustedProxy([Illuminate\Http\Request::HEADER_CLIENT_IP => 'X_FORWARDED_FOR'], '**');
 
         $forwardedFor = [
             '192.0.2.2',
@@ -235,7 +235,7 @@ class TrustedProxyTest extends PHPUnit_Framework_TestCase
         // which is likely something like this:
         $request = Request::create('http://localhost:8888/tag/proxy', 'GET', [], [], [], $serverOverRides, null);
         // Need to make sure these haven't already been set
-        $request->setTrustedProxies([]);
+        $request->setTrustedProxies([], Request::HEADER_X_FORWARDED_ALL);
 
         return $request;
     }
