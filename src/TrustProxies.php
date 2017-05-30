@@ -94,7 +94,7 @@ class TrustProxies
      */
     private function setTrustedProxyIpAddressesToSpecificIps($request, $trustedIps)
     {
-        $request->setTrustedProxies((array) $trustedIps, $this->getTrustedHeaderNames());
+        $request->setTrustedProxies((array) $trustedIps, $this->getTrustedHeaderSet());
     }
 
     /**
@@ -104,7 +104,7 @@ class TrustProxies
      */
     private function setTrustedProxyIpAddressesToTheCallingIp($request)
     {
-        $request->setTrustedProxies($request->getClientIps(), $this->getTrustedHeaderNames());
+        $request->setTrustedProxies($request->getClientIps(), $this->getTrustedHeaderSet());
     }
 
     /**
@@ -117,7 +117,7 @@ class TrustProxies
         // 0.0.0.0/0 is the CIDR for all ipv4 addresses
         // 2000:0:0:0:0:0:0:0/3 is the CIDR for all ipv6 addresses currently
         // allocated http://www.iana.org/assignments/ipv6-unicast-address-assignments/ipv6-unicast-address-assignments.xhtml
-        $request->setTrustedProxies(['0.0.0.0/0', '2000:0:0:0:0:0:0:0/3'], $this->getTrustedHeaderNames());
+        $request->setTrustedProxies(['0.0.0.0/0', '2000:0:0:0:0:0:0:0/3'], $this->getTrustedHeaderSet());
     }
 
     /**
@@ -146,5 +146,17 @@ class TrustProxies
     protected function getTrustedHeaderNames()
     {
         return $this->headers ?: $this->config->get('trustedproxy.headers');
+    }
+
+
+    /**
+     * Construct bit field integer of the header set that setTrustedProxies() expects
+     * @return integer
+     */
+    protected function getTrustedHeaderSet()
+    {
+        return array_reduce(array_keys($this->getTrustedHeaderNames()), function ($set, $key) {
+            return $set | $key;
+        }, 0);
     }
 }
