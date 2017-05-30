@@ -210,6 +210,38 @@ class TrustedProxyTest extends PHPUnit_Framework_TestCase
         });
     }
 
+    public function test_proxies_are_reset() {
+
+        $trustedHeaders = [
+            \Illuminate\Http\Request::HEADER_FORWARDED    => 'FORWARDED',
+            \Illuminate\Http\Request::HEADER_CLIENT_IP    => 'X_FORWARDED_FOR',
+            \Illuminate\Http\Request::HEADER_CLIENT_HOST  => 'X_FORWARDED_HOST',
+            \Illuminate\Http\Request::HEADER_CLIENT_PROTO => 'X_FORWARDED_PROTO',
+            \Illuminate\Http\Request::HEADER_CLIENT_PORT  => 'X_FORWARDED_PORT',
+        ];
+
+        $trustedProxy = $this->createTrustedProxy($trustedHeaders, '*');
+
+        $serverOverrides = [
+            'HTTP_X_FORWARDED_FOR' => '173.174.200.38'
+        ];
+
+        $request = Request::create('http://localhost:8888/tag/proxy', 'GET', [], [], [], $serverOverrides);
+
+        $trustedProxy->handle($request, function() {
+            $expectedProxies = ['127.0.0.1'];
+            $this->assertEquals($expectedProxies, Request::getTrustedProxies());
+        });
+
+        // The trusted proxies should remain the same even after consecutive requests
+        $trustedProxy->handle($request, function() {
+            $expectedProxies = ['127.0.0.1'];
+            $this->assertEquals($expectedProxies, Request::getTrustedProxies());
+        });
+
+    }
+
+
     /**
      * Fake an HTTP request by generating a Symfony Request object.
      *
@@ -234,8 +266,6 @@ class TrustedProxyTest extends PHPUnit_Framework_TestCase
         // Create a fake request made over "http", one that we'd get over a proxy
         // which is likely something like this:
         $request = Request::create('http://localhost:8888/tag/proxy', 'GET', [], [], [], $serverOverRides, null);
-        // Need to make sure these haven't already been set
-        $request->setTrustedProxies([]);
 
         return $request;
     }
@@ -244,7 +274,7 @@ class TrustedProxyTest extends PHPUnit_Framework_TestCase
      * Retrieve a TrustProxies object, with dependencies mocked.
      *
      * @param array $trustedHeaders
-     * @param array $trustedProxies
+     * @param array|string $trustedProxies
      *
      * @return \Fideloper\Proxy\TrustProxies
      */
