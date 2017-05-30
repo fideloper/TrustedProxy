@@ -71,7 +71,7 @@ class TrustProxies
 
         // We trust any IP address that calls us, but not proxies further
         // up the forwarding chain.
-        // todo: Determine if this should only trust the first IP address
+        // TODO: Determine if this should only trust the first IP address
         //       Currently it trusts the entire chain (array of IPs),
         //        potentially making the "**" convention redundant.
         if ($trustedIps === '*') {
@@ -88,6 +88,7 @@ class TrustProxies
 
     /**
      * We specify the IP addresses to trust explicitly
+     *
      * @param $request
      * @param $trustedIps
      */
@@ -98,6 +99,7 @@ class TrustProxies
 
     /**
      * We set the trusted proxy to be the first IP addresses received
+     *
      * @param $request
      */
     private function setTrustedProxyIpAddressesToTheCallingIp($request)
@@ -107,6 +109,7 @@ class TrustProxies
 
     /**
      * Trust all IP Addresses
+     *
      * @param $request
      */
     private function setTrustedProxyIpAddressesToAllIps($request)
@@ -120,6 +123,8 @@ class TrustProxies
     /**
      * Set the trusted header names based on the content of trustedproxy.headers
      * Note: Depreciated in Symfony 3.3+, but available for backwards compatibility
+     *
+     * @depreciated
      * @param \Illuminate\Http\Request $request
      */
     protected function setTrustedProxyHeaderNames($request)
@@ -135,6 +140,7 @@ class TrustProxies
 
     /**
      * Retrieve trusted header names, falling back to defaults if config not set
+     *
      * @return array Proxy header names to use
      */
     protected function getTrustedHeaderNames()
