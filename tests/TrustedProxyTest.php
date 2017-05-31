@@ -33,7 +33,7 @@ class TrustedProxyTest extends PHPUnit_Framework_TestCase
     public function test_does_trust_trusted_proxy()
     {
         $req = $this->createProxiedRequest();
-        $req->setTrustedProxies(['192.168.10.10'], Request::HEADER_X_FORWARDED_ALL);
+        $req->setTrustedProxies(['192.168.10.10'], $this->getDefaultTrustedHeaderSet());
 
         $this->assertEquals('173.174.200.38', $req->getClientIp(), 'Assert trusted proxy x-forwarded-for header used');
         $this->assertEquals('https', $req->getScheme(), 'Assert trusted proxy x-forwarded-proto header used');
@@ -235,7 +235,7 @@ class TrustedProxyTest extends PHPUnit_Framework_TestCase
         // which is likely something like this:
         $request = Request::create('http://localhost:8888/tag/proxy', 'GET', [], [], [], $serverOverRides, null);
         // Need to make sure these haven't already been set
-        $request->setTrustedProxies([], Request::HEADER_X_FORWARDED_ALL);
+        $request->setTrustedProxies([], $this->getDefaultTrustedHeaderSet());
 
         return $request;
     }
@@ -263,4 +263,19 @@ class TrustedProxyTest extends PHPUnit_Framework_TestCase
         return new TrustProxies($config);
     }
 
+    /**
+     * The HEADER_X_FORWARDED_ALL constant was added in Symfony 3.3, so check for it to determine version
+     */
+    protected function usingSymfony3_3Plus()
+    {
+        return defined(Request::class . '::HEADER_X_FORWARDED_ALL');
+    }
+
+    /**
+     * Symfony 3.3 uses the Trusted Header Set, but earlier versions don't
+     */
+    protected function getDefaultTrustedHeaderSet()
+    {
+        return $this->usingSymfony3_3Plus() ? Request::HEADER_X_FORWARDED_ALL : 0;
+    }
 }
