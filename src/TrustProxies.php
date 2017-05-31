@@ -156,6 +156,12 @@ class TrustProxies
     protected function getTrustedHeaderSet()
     {
         return array_reduce(array_keys($this->getTrustedHeaderNames()), function ($set, $key) {
+
+            // PHP 7+ gives a warning if non-numeric value is used
+            // resulting in a thrown ErrorException within Laravel
+            // This error occurs with Symfony < 3.3, PHP7+
+            if( ! is_numeric($set) || ! is_numeric($key) ) return;
+
             return $set | $key;
         }, 0);
     }
