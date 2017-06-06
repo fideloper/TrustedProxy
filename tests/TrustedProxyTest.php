@@ -264,6 +264,38 @@ class TrustedProxyTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * Test distrusting a header.
+     */
+    public function test_can_distrust_headers()
+    {
+        $trustedProxy = $this->createTrustedProxy([
+            (defined('Illuminate\Http\Request::HEADER_FORWARDED') ? Request::HEADER_FORWARDED : 'forwarded') => 'forwarded',
+            Request::HEADER_CLIENT_IP => null,
+            Request::HEADER_CLIENT_HOST => null,
+            Request::HEADER_CLIENT_PROTO => null,
+            Request::HEADER_CLIENT_PORT => null,
+        ], ['192.168.10.10']);
+
+        $request = $this->createProxiedRequest([
+            'HTTP_FORWARDED' => 'for=173.174.200.40:443; proto=https; host=serversforhackers.com',
+            'HTTP_X_FORWARDED_FOR' => '173.174.200.38',
+            'HTTP_X_FORWARDED_HOST' => 'svrs4hkrs.com',
+            'HTTP_X_FORWARDED_PORT' => '80',
+            'HTTP_X_FORWARDED_PROTO' => 'http',
+        ]);
+
+        $trustedProxy->handle($request, function ($request) {
+            $this->assertEquals('173.174.200.40', $request->getClientIp(),
+                'Assert trusted proxy used forwarded header for IP');
+            $this->assertEquals('https', $request->getScheme(),
+                'Assert trusted proxy used forwarded header for scheme');
+            $this->assertEquals('serversforhackers.com', $request->getHost(),
+                'Assert trusted proxy used forwarded header for host');
+            $this->assertEquals(443, $request->getPort(), 'Assert trusted proxy used forwarded header for port');
+        });
+    }
+
+    /**
      * The HEADER_X_FORWARDED_ALL constant was added in Symfony 3.3, so check for it to determine version
      */
     protected function usingSymfony3_3Plus()
