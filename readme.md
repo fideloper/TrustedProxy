@@ -50,7 +50,7 @@ Add the Service Provider:
 ```php
 'providers' => array(
     # other providers omitted
-    'Fideloper\Proxy\TrustedProxyServiceProvider',
+    Fideloper\Proxy\TrustedProxyServiceProvider::class,
 );
 ```
 
