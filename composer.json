@@ -26,6 +26,11 @@
     "extra": {
         "branch-alias": {
             "dev-master": "3.3-dev"
+        },
+        "laravel": {
+            "providers": [
+                "Fideloper\\Proxy\\TrustedProxyServiceProvider"
+            ]
         }
     },
     "minimum-stability": "dev",
