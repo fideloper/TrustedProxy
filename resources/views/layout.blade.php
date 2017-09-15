@@ -13,10 +13,24 @@
     <!-- Styles -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
     <style type="text/css">
+    @import url("https://fonts.googleapis.com/css?family=Raleway:300,400,600");
     .debug-info {
         overflow: scroll;
         padding: 10px;
         word-wrap: break-word;
+    }
+    body {
+        font-family: Raleway,"Helvetica Neue",Helvetica,Arial,sans-serif;
+        background-color: #f5f8fa;
+    }
+    .navbar-default {
+        background-color: #fff;
+        border-color: #d3e0e9;
+    }
+    .panel-default>.panel-heading {
+        color: #333;
+        background-color: #fff;
+        border-color: #d3e0e9;
     }
     </style>
 </head>
@@ -54,6 +68,9 @@
     </div>
 
     <!-- Scripts -->
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+    <!--
+        <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+    -->
 </body>
 </html>

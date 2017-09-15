@@ -21,6 +21,7 @@ class TrustedProxyServiceProvider extends ServiceProvider
         $this->registerPublishing($source);
         $this->configure($source);
         $this->registerRoutes();
+        $this->registerResources();
     }
 
     /**
@@ -65,7 +66,7 @@ class TrustedProxyServiceProvider extends ServiceProvider
     protected function registerRoutes()
     {
         Route::group([
-            'prefix' => 'trustedproxy',
+            'prefix' => 'trusted-proxy',
             'namespace' => 'Fideloper\Proxy\Http\Controllers',
             'middleware' => 'web',
         ], function () {

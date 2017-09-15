@@ -5,7 +5,7 @@
     <div class="row">
         <div class="col-md-8 col-md-offset-2">
             <div class="panel panel-default">
-                <div class="panel-heading">Proxy Debugger</div>
+                <div class="panel-heading">Incoming HTTP Request Data</div>
                 <div class="panel-body">
                     <div class="debug-info">
                         <h3>General</h3>
