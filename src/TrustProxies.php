@@ -146,7 +146,7 @@ class TrustProxies
      *
      * @return array
      */
-    protected function getTrustedHeaderNames()
+    public function getTrustedHeaderNames()
     {
         return $this->headers ?: $this->config->get('trustedproxy.headers');
     }

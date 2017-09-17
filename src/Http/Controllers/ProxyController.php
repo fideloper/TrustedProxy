@@ -22,6 +22,21 @@ class ProxyController extends BaseController
      */
     public function index()
     {
-        return view('proxy::dashboard');
+        $laravel55Middleware = app()->getNamespace().'Http\Middleware\TrustProxies';
+
+        if( class_exists($laravel55Middleware) )
+        {
+            $headers = app($laravel55Middleware)->getTrustedHeaderNames();
+        } else {
+            $headers = app(Fideloper\Proxy\TrustProxies::class)->getTrustedHeaderNames();
+        }
+
+        $headers = collect($headers)->map(function($item, $key) {
+            return str_replace('_', '-', strtolower($item));
+        })->toArray();
+
+        return view('proxy::dashboard', [
+            'headers' => $headers,
+        ]);
     }
 }
