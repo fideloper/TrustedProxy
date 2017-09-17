@@ -3,6 +3,7 @@
 namespace Fideloper\Proxy;
 
 use Closure;
+use Illuminate\Support\Facades\Route;
 
 class Proxy {
 
@@ -35,7 +36,25 @@ class Proxy {
     public static function auth(Closure $callback)
     {
         static::$authUsing = $callback;
+        $registerRoutes = static::check(request());
+
+        if( $registerRoutes )
+        {
+            static::routes();
+        }
 
         return new static;
+    }
+
+    public static function routes()
+    {
+        Route::group([
+            'prefix' => 'trusted-proxy',
+            'middleware' => 'web',
+        ], function () {
+            if (! app()->routesAreCached()) {
+                require __DIR__.'/../routes/web.php';
+            }
+        });
     }
 }

@@ -2,7 +2,6 @@
 
 namespace Fideloper\Proxy;
 
-use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Foundation\Application as LaravelApplication;
 use Laravel\Lumen\Application as LumenApplication;
@@ -20,7 +19,6 @@ class TrustedProxyServiceProvider extends ServiceProvider
 
         $this->registerPublishing($source);
         $this->configure($source);
-        $this->registerRoutes();
         $this->registerResources();
     }
 
@@ -55,20 +53,6 @@ class TrustedProxyServiceProvider extends ServiceProvider
     protected function configure($source)
     {
         $this->mergeConfigFrom($source, 'trustedproxy');
-    }
-
-    /**
-     * Register Proxy routes
-     */
-    protected function registerRoutes()
-    {
-        Route::group([
-            'prefix' => 'trusted-proxy',
-            'namespace' => 'Fideloper\Proxy\Http\Controllers',
-            'middleware' => 'web',
-        ], function () {
-            $this->loadRoutesFrom(__DIR__.'/../routes/web.php');
-        });
     }
 
     /**

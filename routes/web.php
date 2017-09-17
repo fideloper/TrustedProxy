@@ -2,4 +2,4 @@
 
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', 'ProxyController@index');
+Route::get('/', '\Fideloper\Proxy\Http\Controllers\ProxyController@index');
