@@ -37,8 +37,7 @@ class TrustedProxyServiceProvider extends ServiceProvider
 
     /**
      * Register published assets / config
-     * @param  [type] $source [description]
-     * @return [type]         [description]
+     * @param $source
      */
     protected function registerPublishing($source)
     {
@@ -51,8 +50,7 @@ class TrustedProxyServiceProvider extends ServiceProvider
 
     /**
      * Configure TrustedProxy
-     * @param  [type] $source [description]
-     * @return [type]         [description]
+     * @param $source
      */
     protected function configure($source)
     {
@@ -61,7 +59,6 @@ class TrustedProxyServiceProvider extends ServiceProvider
 
     /**
      * Register Proxy routes
-     * @return [type] [description]
      */
     protected function registerRoutes()
     {
