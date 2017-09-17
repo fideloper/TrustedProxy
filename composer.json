@@ -30,7 +30,10 @@
         "laravel": {
             "providers": [
                 "Fideloper\\Proxy\\TrustedProxyServiceProvider"
-            ]
+            ],
+            "aliases": {
+                "Proxy": "Fideloper\\Proxy\\Proxy"
+            }
         }
     },
     "minimum-stability": "dev",
