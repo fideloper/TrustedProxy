@@ -49,7 +49,7 @@
                         @endforeach
                     </ul>
                     <p>Note that not every header needs to be found. For example, the <code>forwarded</code> header is not yet commonly used.<br />
-                       The most important headers are typically the following, which identify the client IP address and schema (<code>http</code> vs <code>https</code>).</p>
+                       The most important headers are typically the following, which identify the client IP address and scheme (<code>http</code> vs <code>https</code>).</p>
                     <ul>
                         <li><code>Request::HEADER_X_FORWARDED_FOR</code></li>
                         <li><code>Request::HEADER_X_FORWARDED_PROTO</code></li>
