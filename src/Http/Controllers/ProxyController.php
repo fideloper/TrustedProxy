@@ -2,9 +2,9 @@
 
 namespace Fideloper\Proxy\Http\Controllers;
 
-use Illuminate\Routing\Controller as BaseController;
+#use Illuminate\Routing\Controller as BaseController;
 
-class ProxyController extends BaseController
+class ProxyController /*extends BaseController*/
 {
     /**
      * Show the Proxy debugger dashboard
@@ -17,7 +17,7 @@ class ProxyController extends BaseController
         {
             $headers = app($laravel55Middleware)->getTrustedHeaderNames();
         } else {
-            $headers = app(Fideloper\Proxy\TrustProxies::class)->getTrustedHeaderNames();
+            $headers = app(\Fideloper\Proxy\TrustProxies::class)->getTrustedHeaderNames();
         }
 
         $headers = collect($headers)->map(function($item, $key) {
@@ -26,6 +26,7 @@ class ProxyController extends BaseController
 
         return view('proxy::dashboard', [
             'headers' => $headers,
+            'request' => app(\Illuminate\Http\Request::class)
         ]);
     }
 }
