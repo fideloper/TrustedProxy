@@ -36,25 +36,24 @@ class Proxy {
     public static function auth(Closure $callback)
     {
         static::$authUsing = $callback;
-        $registerRoutes = static::check(request());
-
+        $registerRoutes = static::check(
+            app(\Illuminate\Http\Request::class)
+        );
         if( $registerRoutes )
         {
             static::routes();
         }
-
         return new static;
     }
 
     public static function routes()
     {
-        Route::group([
+        $router = app();
+        $router->group([
             'prefix' => 'trusted-proxy',
-            'middleware' => 'web',
-        ], function () {
-            if (! app()->routesAreCached()) {
+            /*'middleware' => 'web',*/
+        ], function () use ($router) {
                 require __DIR__.'/../routes/web.php';
-            }
         });
     }
 }
