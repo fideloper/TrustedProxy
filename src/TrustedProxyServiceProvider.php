@@ -18,7 +18,7 @@ class TrustedProxyServiceProvider extends ServiceProvider
         $source = __DIR__.'/../config/trustedproxy.php';
 
         if ($this->app instanceof LaravelApplication && $this->app->runningInConsole()) {
-            $this->publishes([realpath($source) => config_path('trustedproxy.php')]);
+            $this->publishes([$source => config_path('trustedproxy.php')]);
         } elseif ($this->app instanceof LumenApplication) {
             $this->app->configure('trustedproxy');
         }
