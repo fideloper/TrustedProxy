@@ -4,6 +4,7 @@ namespace Fideloper\Proxy;
 
 use Closure;
 use Illuminate\Contracts\Config\Repository;
+use Symfony\Component\HttpFoundation\Request;
 
 class TrustProxies
 {
@@ -137,7 +138,9 @@ class TrustProxies
         if(!is_array($trustedHeaderNames)) { return; } // Leave the defaults
 
         foreach ($trustedHeaderNames as $headerKey => $headerName) {
-            $request->setTrustedHeaderName($headerKey, $headerName);
+            // calling deprecated method
+            //$request->setTrustedHeaderName($headerKey, $headerName);
+            Request::setTrustedProxies($trustedHeaderNames, $headerKey);
         }
     }
 
