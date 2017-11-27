@@ -10,6 +10,10 @@
 
 Laravel 5 has a much nicer system for Middleware, which this package now takes advantage of.
 
+**Note: TrustedProxy is now included with Laravel 5.5.** To configure for this version of Laravel, please see: https://laravel.com/docs/5.5/requests#configuring-trusted-proxies
+
+For older 5.x versions of Laravel, please continue below.
+
 New features include:
 
 1. TrustedProxies are now set as in an HTTP Middleware, which makes more logical sense than the previous ServiceProvider. If you're unsure what that means, remember to "Just Trust Fideloper™".
