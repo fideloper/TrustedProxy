@@ -124,9 +124,7 @@ class TrustProxies
     /**
      * Set the trusted header names based on the content of trustedproxy.headers.
      *
-     * Note: Depreciated in Symfony 3.3+, but available for backwards compatibility.
-     *
-     * @depreciated
+     * @deprecated Since Symfony 3.3+, but available for backwards compatibility.
      *
      * @param \Illuminate\Http\Request $request
      */
