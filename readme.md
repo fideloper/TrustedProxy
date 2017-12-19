@@ -4,9 +4,25 @@
 
 [![Total Downloads](https://poser.pugx.org/fideloper/proxy/downloads.png)](https://packagist.org/packages/fideloper/proxy)
 
+## Laravel 5.6
+
+Please use tag 4.0+ for Laravel 5.6:
+
+```bash
+composer require fideloper/proxy:~4.0
+```
+
+**TrustedProxy is still included with Laravel 5.6+.** To configure for this version of Laravel, please see: https://laravel.com/docs/5.6/requests#configuring-trusted-proxies
+
 ## Laravel 5.5
 
-**TrustedProxy is now included with Laravel 5.5.** To configure for this version of Laravel, please see: https://laravel.com/docs/5.5/requests#configuring-trusted-proxies
+**TrustedProxy is now included with Laravel 5.5+.** To configure for this version of Laravel, please see: https://laravel.com/docs/5.5/requests#configuring-trusted-proxies
+
+Please use tag 3.0+ for Laravel 5.5:
+
+```bash
+composer require fideloper/proxy:~3.0
+```
 
 ## Laravel 5.0 - 5.4
 
