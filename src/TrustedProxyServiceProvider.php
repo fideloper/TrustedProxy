@@ -23,7 +23,10 @@ class TrustedProxyServiceProvider extends ServiceProvider
             $this->app->configure('trustedproxy');
         }
 
-        $this->mergeConfigFrom($source, 'trustedproxy');
+
+        if ($this->app instanceof LaravelApplication && ! $this->app->configurationIsCached()) {
+            $this->mergeConfigFrom($source, 'trustedproxy');
+        }
     }
 
     /**
