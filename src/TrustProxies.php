@@ -66,23 +66,20 @@ class TrustProxies
     {
         $trustedIps = $this->proxies ?: $this->config->get('trustedproxy.proxies');
 
-        // We only trust specific IP addresses
+        // Only trust specific IP addresses
         if (is_array($trustedIps)) {
             return $this->setTrustedProxyIpAddressesToSpecificIps($request, $trustedIps);
         }
 
-        // We trust any IP address that calls us, but not proxies further
-        // up the forwarding chain.
-        // TODO: Determine if this should only trust the first IP address
-        //       Currently it trusts the entire chain (array of IPs),
-        //       potentially making the "**" convention redundant.
-        if ($trustedIps === '*') {
+        // Trust any IP address that calls us
+        // `**` for backwards compatibility, but is depreciated
+        if ($trustedIps === '*' || $trustedIps === '**') {
             return $this->setTrustedProxyIpAddressesToTheCallingIp($request);
         }
     }
 
     /**
-     * We specify the IP addresses to trust explicitly.
+     * Specify the IP addresses to trust explicitly.
      *
      * @param \Illuminate\Http\Request $request
      * @param array                    $trustedIps
@@ -93,7 +90,7 @@ class TrustProxies
     }
 
     /**
-     * We set the trusted proxy to be the first IP addresses received.
+     * Set the trusted proxy to be the IP address calling this servers
      *
      * @param \Illuminate\Http\Request $request
      */

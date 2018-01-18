@@ -34,7 +34,7 @@ class TrustedProxyTest extends TestCase
     public function test_does_trust_trusted_proxy()
     {
         $req = $this->createProxiedRequest();
-        $req->setTrustedProxies(['192.168.10.10'], Request::HEADER_X_FORWARDED_FOR);
+        $req->setTrustedProxies(['192.168.10.10'], Request::HEADER_X_FORWARDED_ALL);
 
         $this->assertEquals('173.174.200.38', $req->getClientIp(), 'Assert trusted proxy x-forwarded-for header used');
         $this->assertEquals('https', $req->getScheme(), 'Assert trusted proxy x-forwarded-proto header used');
@@ -49,6 +49,20 @@ class TrustedProxyTest extends TestCase
     public function test_trusted_proxy_sets_trusted_proxies_with_wildcard()
     {
         $trustedProxy = $this->createTrustedProxy(Request::HEADER_X_FORWARDED_ALL, '*');
+        $request = $this->createProxiedRequest();
+
+        $trustedProxy->handle($request, function ($request) {
+            $this->assertEquals('173.174.200.38', $request->getClientIp(), 'Assert trusted proxy x-forwarded-for header used with wildcard proxy setting');
+        });
+    }
+
+    /**
+     * Test the next most typical usage of TrustedProxies:
+     * Trusted X-Forwarded-For header, wilcard for TrustedProxies
+     */
+    public function test_trusted_proxy_sets_trusted_proxies_with_double_wildcard_for_backwards_compat()
+    {
+        $trustedProxy = $this->createTrustedProxy(Request::HEADER_X_FORWARDED_ALL, '**');
         $request = $this->createProxiedRequest();
 
         $trustedProxy->handle($request, function ($request) {
@@ -197,7 +211,7 @@ class TrustedProxyTest extends TestCase
         // which is likely something like this:
         $request = Request::create('http://localhost:8888/tag/proxy', 'GET', [], [], [], $serverOverRides, null);
         // Need to make sure these haven't already been set
-        $request->setTrustedProxies([], Request::HEADER_X_FORWARDED_FOR);
+        $request->setTrustedProxies([], Request::HEADER_X_FORWARDED_ALL);
 
         return $request;
     }
