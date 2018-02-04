@@ -6,7 +6,10 @@
 
 ## Laravel 5.5
 
-**TrustedProxy is now included with Laravel 5.5.** To configure for this version of Laravel, please see: https://laravel.com/docs/5.5/requests#configuring-trusted-proxies
+**TrustedProxy is now included with Laravel 5.5.**
+
+With 5.5 you no longer need the file config/trustedproxy, so don't publish it with vendor:publish, just configure the middleware included in your laravel installation instead.
+For full instructions, see: https://laravel.com/docs/5.5/requests#configuring-trusted-proxies
 
 ## Laravel 5.0 - 5.4
 
