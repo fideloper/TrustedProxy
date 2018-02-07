@@ -24,9 +24,6 @@
         }
     },
     "extra": {
-        "branch-alias": {
-            "dev-develop": "4.0-dev"
-        },
         "laravel": {
             "providers": [
                 "Fideloper\\Proxy\\TrustedProxyServiceProvider"
