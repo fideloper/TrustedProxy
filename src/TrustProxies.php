@@ -66,15 +66,18 @@ class TrustProxies
     {
         $trustedIps = $this->proxies ?: $this->config->get('trustedproxy.proxies');
 
+        // Trust any IP address that calls us
+        // `**` for backwards compatibility, but is deprecated
+        if ($trustedIps === '*' || $trustedIps === '**') {
+            return $this->setTrustedProxyIpAddressesToTheCallingIp($request);
+        }
+
+        // Support IPs addresses separated by comma
+        $trustedIps = is_string($trustedIps) ? explode(',', $trustedIps) : $trustedIps;
+
         // Only trust specific IP addresses
         if (is_array($trustedIps)) {
             return $this->setTrustedProxyIpAddressesToSpecificIps($request, $trustedIps);
-        }
-
-        // Trust any IP address that calls us
-        // `**` for backwards compatibility, but is depreciated
-        if ($trustedIps === '*' || $trustedIps === '**') {
-            return $this->setTrustedProxyIpAddressesToTheCallingIp($request);
         }
     }
 
@@ -106,6 +109,20 @@ class TrustProxies
      */
     protected function getTrustedHeaderNames()
     {
-        return $this->headers ?: $this->config->get('trustedproxy.headers');
+        $headers = $this->headers ?: $this->config->get('trustedproxy.headers');
+        switch ($headers) {
+            case 'HEADER_X_FORWARDED_AWS_ELB':
+            case Request::HEADER_X_FORWARDED_AWS_ELB:
+                $headers = Request::HEADER_X_FORWARDED_AWS_ELB;
+                break;
+            case 'HEADER_FORWARDED':
+            case Request::HEADER_FORWARDED:
+                $headers = Request::HEADER_FORWARDED;
+                break;
+            default:
+                $headers = Request::HEADER_X_FORWARDED_ALL;
+        }
+
+        $this->headers = $headers;
     }
 }
