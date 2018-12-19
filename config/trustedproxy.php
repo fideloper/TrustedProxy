@@ -22,7 +22,7 @@ return [
      * directly to your server, use an array or a string separated by comma of IP addresses:
      */
     // 'proxies' => ['192.168.1.1'],
-    // 'proxies' => '192.168.1.1, 192.168.1.1',
+    // 'proxies' => '192.168.1.1, 192.168.1.2',
 
     /*
      * Or, to trust all proxies that connect

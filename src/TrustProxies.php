@@ -73,7 +73,7 @@ class TrustProxies
         }
 
         // Support IPs addresses separated by comma
-        $trustedIps = is_string($trustedIps) ? explode(',', $trustedIps) : $trustedIps;
+        $trustedIps = is_string($trustedIps) ? array_map('trim', explode(',', $trustedIps)) : $trustedIps;
 
         // Only trust specific IP addresses
         if (is_array($trustedIps)) {
@@ -105,7 +105,7 @@ class TrustProxies
     /**
      * Retrieve trusted header name(s), falling back to defaults if config not set.
      *
-     * @return array
+     * @return int A bit field of Request::HEADER_*, to set which headers to trust from your proxies.
      */
     protected function getTrustedHeaderNames()
     {
