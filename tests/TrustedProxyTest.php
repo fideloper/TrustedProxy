@@ -70,8 +70,6 @@ class TrustedProxyTest extends TestCase
         });
     }
 
-
-
     /**
      * Test the most typical usage of TrustProxies:
      * Trusted X-Forwarded-For header
@@ -182,6 +180,44 @@ class TrustedProxyTest extends TestCase
         });
     }
 
+    /**
+     * Test to ensure it's reading text-based configurations and converting it correctly.
+     */
+    public function test_is_reading_text_based_configurations()
+    {
+        $request = $this->createProxiedRequest();
+
+        // trust *all* "X-Forwarded-*" headers
+        $trustedProxy = $this->createTrustedProxy('HEADER_X_FORWARDED_ALL', '192.168.1.1, 192.168.1.2');
+        $trustedProxy->handle($request, function (Request $request) {
+            $this->assertEquals($request->getTrustedHeaderSet(), Request::HEADER_X_FORWARDED_ALL,
+                'Assert trusted proxy used all "X-Forwarded-*" header');
+
+            $this->assertEquals($request->getTrustedProxies(), ['192.168.1.1', '192.168.1.2'],
+                'Assert trusted proxy using proxies as string separated by comma.');
+        });
+
+        // or, if your proxy instead uses the "Forwarded" header
+        $trustedProxy = $this->createTrustedProxy('HEADER_FORWARDED', '192.168.1.1, 192.168.1.2');
+        $trustedProxy->handle($request, function (Request $request) {
+            $this->assertEquals($request->getTrustedHeaderSet(), Request::HEADER_FORWARDED,
+                'Assert trusted proxy used forwarded header');
+
+            $this->assertEquals($request->getTrustedProxies(), ['192.168.1.1', '192.168.1.2'],
+                'Assert trusted proxy using proxies as string separated by comma.');
+        });
+
+        // or, if you're using AWS ELB
+        $trustedProxy = $this->createTrustedProxy('HEADER_X_FORWARDED_AWS_ELB', '192.168.1.1, 192.168.1.2');
+        $trustedProxy->handle($request, function (Request $request) {
+            $this->assertEquals($request->getTrustedHeaderSet(), Request::HEADER_X_FORWARDED_AWS_ELB,
+                'Assert trusted proxy used AWS ELB header');
+
+            $this->assertEquals($request->getTrustedProxies(), ['192.168.1.1', '192.168.1.2'],
+                'Assert trusted proxy using proxies as string separated by comma.');
+        });
+    }
+
     ################################################################
     # Utility Functions
     ################################################################
@@ -219,8 +255,8 @@ class TrustedProxyTest extends TestCase
     /**
      * Retrieve a TrustProxies object, with dependencies mocked.
      *
-     * @param array $trustedHeaders
-     * @param array $trustedProxies
+     * @param null|string|int $trustedHeaders
+     * @param null|array|string $trustedProxies
      *
      * @return \Fideloper\Proxy\TrustProxies
      */
