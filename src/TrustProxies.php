@@ -113,16 +113,17 @@ class TrustProxies
         switch ($headers) {
             case 'HEADER_X_FORWARDED_AWS_ELB':
             case Request::HEADER_X_FORWARDED_AWS_ELB:
-                $this->headers = Request::HEADER_X_FORWARDED_AWS_ELB;
+                return Request::HEADER_X_FORWARDED_AWS_ELB;
                 break;
             case 'HEADER_FORWARDED':
             case Request::HEADER_FORWARDED:
-                $this->headers = Request::HEADER_FORWARDED;
+                return Request::HEADER_FORWARDED;
                 break;
             default:
-                $this->headers = Request::HEADER_X_FORWARDED_ALL;
+                return Request::HEADER_X_FORWARDED_ALL;
         }
 
-        return $this->headers;
+        // Should never reach this point
+        return $headers;
     }
 }
