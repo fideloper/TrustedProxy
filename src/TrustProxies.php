@@ -18,14 +18,14 @@ class TrustProxies
     /**
      * The trusted proxies for the application.
      *
-     * @var array
+     * @var null|string|array
      */
     protected $proxies;
 
     /**
      * The proxy header mappings.
      *
-     * @var array
+     * @var null|string|int
      */
     protected $headers;
 
