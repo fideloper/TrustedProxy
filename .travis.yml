@@ -1,12 +1,13 @@
 language: php
 
+dist: bionic
+
 php:
   - 7.1
   - 7.2
   - 7.3
+  - 7.4
 
-sudo: false
-
-install: travis_retry composer install --no-interaction --prefer-source
+install: travis_retry composer install
 
 script: vendor/bin/phpunit
