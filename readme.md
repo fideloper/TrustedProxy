@@ -67,7 +67,7 @@ Install Trusted Proxy:
 $ composer require fideloper/proxy
 ```
 
-Add the Service Provider:
+Add the Service Provider (not necessary for Laravel 5.5+):
 
 ```php
 'providers' => array(
@@ -100,41 +100,14 @@ The below will trust a proxy, such as a load balancer or web cache, at IP addres
 <?php
 
 return [
-    'proxies' => [
-        '192.168.10.10',
-    ],
+    'proxies' => '192.168.10.10',
 
-    // These are defaults already set in the config:
-    'headers' => [
-        (defined('Illuminate\Http\Request::HEADER_FORWARDED') ? Illuminate\Http\Request::HEADER_FORWARDED : 'forwarded') => 'FORWARDED',
-        \Illuminate\Http\Request::HEADER_CLIENT_IP    => 'X_FORWARDED_FOR',
-        \Illuminate\Http\Request::HEADER_CLIENT_HOST  => 'X_FORWARDED_HOST',
-        \Illuminate\Http\Request::HEADER_CLIENT_PROTO => 'X_FORWARDED_PROTO',
-        \Illuminate\Http\Request::HEADER_CLIENT_PORT  => 'X_FORWARDED_PORT',
-    ]
+    // This default is already set in the config:
+    'headers' => Illuminate\Http\Request::HEADER_X_FORWARDED_ALL,
 ];
 ```
 
-Note: If you're using AWS Elastic Load Balancing or Heroku, the FORWARDED and X_FORWARDED_HOST headers should be set to null as they are currently unsupported there.
-
-```php
-<?php
-
-return [
-    'proxies' => [
-        '192.168.10.10',
-    ],
-
-    // These are defaults already set in the config:
-    'headers' => [
-        (defined('Illuminate\Http\Request::HEADER_FORWARDED') ? Illuminate\Http\Request::HEADER_FORWARDED : 'forwarded') => null,
-        \Illuminate\Http\Request::HEADER_CLIENT_IP    => 'X_FORWARDED_FOR',
-        \Illuminate\Http\Request::HEADER_CLIENT_HOST  => null,
-        \Illuminate\Http\Request::HEADER_CLIENT_PROTO => 'X_FORWARDED_PROTO',
-        \Illuminate\Http\Request::HEADER_CLIENT_PORT  => 'X_FORWARDED_PORT',
-    ]
-];
-```
+Note: If you're using AWS Elastic Load Balancing or Heroku, the headers should be set to `Request::HEADER_X_FORWARDED_AWS_ELB` as `X-Forwarded-Host` is currently unsupported there.
 
 ## What's All This Do?
 
@@ -166,7 +139,7 @@ This package lives inside of Packagist and is therefore easily installable via C
 ```json
 {
     "require": {
-        "fideloper/proxy": "^3.3"
+        "fideloper/proxy": "^4.2"
     }
 }
 ```
@@ -178,7 +151,7 @@ Once that's added, run `$ composer update` to download the files.
 
 The next step to installation is to add the Service Provider.
 
-Edit `config/app.php` and add the provided Service Provider:
+Edit `config/app.php` and add the provided Service Provider (not necessary for Laravel 5.5+):
 
 ```php
 'providers' => array(
@@ -228,63 +201,45 @@ return [
      * within TrustedProxy to trust any proxy
      * that connects directly to your server,
      * a requirement when you cannot know the address
-     * of your proxy (e.g. if using Rackspace balancers).
+     * of your proxy (e.g. if using ELB or similar).
      *
-     * The "**" character is syntactic sugar within
-     * TrustedProxy to trust not just any proxy that
-     * connects directly to your server, but also
-     * proxies that connect to those proxies, and all
-     * the way back until you reach the original source
-     * IP. It will mean that $request->getClientIp()
-     * always gets the originating client IP, no matter
-     * how many proxies that client's request has
-     * subsequently passed through.
      */
     'proxies' => [
-        '192.168.1.10',
+        '192.168.1.10'
     ],
 
     /*
+     * To trust one or more specific proxies that connect
+     * directly to your server, use an array or a string separated by comma of IP addresses:
+     */
+    // 'proxies' => ['192.168.1.1'],
+    // 'proxies' => '192.168.1.1, 192.168.1.2',
+
+    /*
      * Or, to trust all proxies that connect
-     * directly to your server, uncomment this:
+     * directly to your server, use a "*"
      */
-     # 'proxies' => '*',
+    // 'proxies' => '*',
 
     /*
-     * Or, to trust ALL proxies, including those that
-     * are in a chain of forwarding, uncomment this:
-    */
-    # 'proxies' => '**',
-
-    /*
-     * Default Header Names
+     * Which headers to use to detect proxy related data (For, Host, Proto, Port)
      *
-     * Change these if the proxy does
-     * not send the default header names.
+     * Options include:
      *
-     * Note that headers such as X-Forwarded-For
-     * are transformed to HTTP_X_FORWARDED_FOR format.
+     * - Illuminate\Http\Request::HEADER_X_FORWARDED_ALL (use all x-forwarded-* headers to establish trust)
+     * - Illuminate\Http\Request::HEADER_FORWARDED (use the FORWARDED header to establish trust)
+     * - Illuminate\Http\Request::HEADER_X_FORWARDED_AWS_ELB (If you are using AWS Elastic Load Balancer)
      *
-     * The following are Symfony defaults, found in
-     * \Symfony\Component\HttpFoundation\Request::$trustedHeaders
+     * - 'HEADER_X_FORWARDED_ALL' (use all x-forwarded-* headers to establish trust)
+     * - 'HEADER_FORWARDED' (use the FORWARDED header to establish trust)
+     * - 'HEADER_X_FORWARDED_AWS_ELB' (If you are using AWS Elastic Load Balancer)
      *
-     * You may optionally set headers to 'null' here if you'd like
-     * for them to be considered untrusted instead. Ex:
-     *
-     * Illuminate\Http\Request::HEADER_CLIENT_HOST  => null,
-     * 
-     * WARNING: If you're using AWS Elastic Load Balancing or Heroku,
-     * the FORWARDED and X_FORWARDED_HOST headers should be set to null 
-     * as they are currently unsupported there.
+     * @link https://symfony.com/doc/current/deployment/proxies.html
      */
-    'headers' => [
-        (defined('Illuminate\Http\Request::HEADER_FORWARDED') ? Illuminate\Http\Request::HEADER_FORWARDED : 'forwarded') => 'FORWARDED',
-        Illuminate\Http\Request::HEADER_CLIENT_IP    => 'X_FORWARDED_FOR',
-        Illuminate\Http\Request::HEADER_CLIENT_HOST  => 'X_FORWARDED_HOST',
-        Illuminate\Http\Request::HEADER_CLIENT_PROTO => 'X_FORWARDED_PROTO',
-        Illuminate\Http\Request::HEADER_CLIENT_PORT  => 'X_FORWARDED_PORT',
-    ]
+    'headers' => Illuminate\Http\Request::HEADER_X_FORWARDED_ALL,
+
 ];
+
 ```
 
 In the example above, we are pretending we have a load balancer or other proxy which lives at `192.168.1.10`.
@@ -309,66 +264,35 @@ However, if you are in the situation where, say, you have a Content Distribution
 then you may end up with a chain of unknown proxies forwarding from one to another. In that case, '*' above would only match
 the final proxy (the load balancer in this case) which means that calling `$request->getClientIp()` would return the IP address 
 of the next proxy in line (in this case one of the Content Distribution Network ips) rather than the original client IP.
-To always get the original client IP, you need to trust all the proxies in the route to your request. You can do this by:
-
-**In that case, you can set the 'proxies' variable to '**':**
+To always get the original client IP, you need to trust all the proxies in the route to your request:
 
 ```php
 <?php
 
 return [
-
-     'proxies' => '**',
+    
+    'proxies' => [
+        '*',
+        '192.168.1.10',
+    ],
 
 ];
 ```
 
-Which will trust every single IP address. 
+In the example above, we are pretending we have a load balancer or other proxy behind a CDN proxy which lives at `192.168.1.10`.
 
+### Configure Trusted Headers
 
-#### Changing X-Forwarded-* Header Names
+By default all 'X-Forwarded-* headers' will be used to establish trust.
 
-By default, the underlying Symfony `Request` class expects the following header names to be sent from a proxy:
-
-* **X-Forwarded-For**
-* **X-Forwarded-Host**
-* **X-Forwarded-Proto**
-* **X-Forwarded-Port**
-
-Some proxies may send slightly different headers. In those cases, you can tell the Symfony `Request` class what those headers are named.
-
-For example, HAProxy may send an `X-Forwarded-Scheme` header rather than `X-Forwarded-Proto`. We can adjust Laravel (Well Actually™, the Symfony HTTP `Request` class) to fix this with the following configuration:
+Some services don't support specific headers, so you need to untrust them. In particular, AWS ELB and Heroku don't support `FORWARDED` and `X_FORWARDED_HOST` so you should disable these headers in order to prevent users from spoofing trusted IPs.
 
 ```php
 <?php
 
 return [
 
-    'headers' => [
-        Illuminate\Http\Request::HEADER_CLIENT_PROTO => 'X_FORWARDED_SCHEME',
-    ]
-
-];
-```
-
-And voilà, our application will now know what to do with the `X-Forwarded-Scheme` header.
-
-> Don't worry about the defaults being `IN_THIS_FORMAT`, while we set the headers `In-This-Format`. It all gets normalized under the hood. Symfony's HTTP classes are the bomb 💥.
-
-Some services don't support specific headers, so you can also set these to `null` to untrust them. In particular, AWS ELB and Heroku don't support `FORWARDED` and `X_FORWARDED_HOST` so you should set these to `null` in order to prevent users from spoofing trusted IPs.
-
-```php
-<?php
-
-return [
-
-    'headers' => [
-        (defined('Illuminate\Http\Request::HEADER_FORWARDED') ? Illuminate\Http\Request::HEADER_FORWARDED : 'forwarded') => null,
-        \Illuminate\Http\Request::HEADER_CLIENT_IP    => 'X_FORWARDED_FOR',
-        \Illuminate\Http\Request::HEADER_CLIENT_HOST  => null,
-        \Illuminate\Http\Request::HEADER_CLIENT_PROTO => 'X_FORWARDED_PROTO',
-        \Illuminate\Http\Request::HEADER_CLIENT_PORT  => 'X_FORWARDED_PORT',
-    ]
+    'headers' => Illuminate\Http\Request::HEADER_X_FORWARDED_AWS_ELB,
 
 ];
 ```
