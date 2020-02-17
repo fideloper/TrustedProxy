@@ -218,6 +218,22 @@ class TrustedProxyTest extends TestCase
         });
     }
 
+    public function test_can_use_custom_header_bitmasks()
+    {
+        $request = $this->createProxiedRequest();
+
+        // trust *all* "X-Forwarded-*" headers except X-Forwarded-Port
+        $trustedProxy = $this->createTrustedProxy(
+            Request::HEADER_X_FORWARDED_ALL ^ Request::HEADER_X_FORWARDED_PORT,
+            '192.168.1.1, 192.168.1.2');
+        $trustedProxy->handle($request, function (Request $request) {
+            $this->assertEquals(
+                $request->getTrustedHeaderSet(),
+                Request::HEADER_X_FORWARDED_ALL ^ Request::HEADER_X_FORWARDED_PORT,
+                'Assert trusted proxy used custom "X-Forwarded-*" headers');
+        });
+    }
+
     ################################################################
     # Utility Functions
     ################################################################

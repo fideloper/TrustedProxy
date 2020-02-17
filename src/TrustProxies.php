@@ -110,20 +110,20 @@ class TrustProxies
     protected function getTrustedHeaderNames()
     {
         $headers = $this->headers ?: $this->config->get('trustedproxy.headers');
+
+        if (is_int($headers)) {
+            return $headers;
+        }
+
         switch ($headers) {
             case 'HEADER_X_FORWARDED_AWS_ELB':
-            case Request::HEADER_X_FORWARDED_AWS_ELB:
                 return Request::HEADER_X_FORWARDED_AWS_ELB;
                 break;
             case 'HEADER_FORWARDED':
-            case Request::HEADER_FORWARDED:
                 return Request::HEADER_FORWARDED;
                 break;
             default:
                 return Request::HEADER_X_FORWARDED_ALL;
         }
-
-        // Should never reach this point
-        return $headers;
     }
 }
