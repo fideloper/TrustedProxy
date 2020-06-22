@@ -275,7 +275,7 @@ class TrustedProxyTest extends TestCase
 
         $trustedProxy->handle($request, function ($request) {
             $this->assertEquals('173.174.200.38', $request->getClientIp(),
-                'Assert trusted proxy did not use forwarded header for IP');
+                'Assert trusted proxy used forwarded header for IP');
             $this->assertEquals('https', $request->getScheme(),
                 'Assert trusted proxy used forwarded header for scheme');
             $this->assertEquals('serversforhackers.com', $request->getHost(),
