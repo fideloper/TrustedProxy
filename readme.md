@@ -1,6 +1,6 @@
 # Laravel Trusted Proxies
 
-[![Build Status](https://travis-ci.org/fideloper/TrustedProxy.svg?branch=master)](https://travis-ci.org/fideloper/TrustedProxy) [![Total Downloads](https://poser.pugx.org/fideloper/proxy/downloads.png)](https://packagist.org/packages/fideloper/proxy)
+[![Build Status](https://github.com/fideloper/TrustedProxy/workflows/Tests/badge.svg)](https://github.com/fideloper/TrustedProxy/actions) [![Total Downloads](https://poser.pugx.org/fideloper/proxy/downloads.png)](https://packagist.org/packages/fideloper/proxy)
 
 **Setting a trusted proxy allows for correct URL generation, redirecting, session handling and logging in Laravel when behind a reverse proxy such as a load balancer or cache.**
 
