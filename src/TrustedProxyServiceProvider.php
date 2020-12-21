@@ -9,11 +9,11 @@ use Laravel\Lumen\Application as LumenApplication;
 class TrustedProxyServiceProvider extends ServiceProvider
 {
     /**
-     * Boot the service provider.
+     * Register the service provider.
      *
      * @return void
      */
-    public function boot()
+    public function register()
     {
         $source = realpath($raw = __DIR__.'/../config/trustedproxy.php') ?: $raw;
 
@@ -27,15 +27,5 @@ class TrustedProxyServiceProvider extends ServiceProvider
         if ($this->app instanceof LaravelApplication && ! $this->app->configurationIsCached()) {
             $this->mergeConfigFrom($source, 'trustedproxy');
         }
-    }
-
-    /**
-     * Register the service provider.
-     *
-     * @return void
-     */
-    public function register()
-    {
-        //
     }
 }
