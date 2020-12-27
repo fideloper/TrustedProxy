@@ -16,6 +16,7 @@
 * [Laravel 5.8](https://laravel.com/docs/5.8/requests#configuring-trusted-proxies) Docs (`fideloper/proxy:^4.0`)
 * [Laravel 6.x](https://laravel.com/docs/6.x/requests#configuring-trusted-proxies) Docs (`fideloper/proxy:^4.0`)
 * [Laravel 7.x](https://laravel.com/docs/7.x/requests#configuring-trusted-proxies) Docs (`fideloper/proxy:^4.2`)
+* [Laravel 8.x](https://laravel.com/docs/8.x/requests#configuring-trusted-proxies) Docs (`fideloper/proxy:^4.3`)
 
 
 ### Laravel 5.0 - 5.4
