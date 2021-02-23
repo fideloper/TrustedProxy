@@ -69,7 +69,7 @@ class TrustProxies
         // Trust any IP address that calls us
         // `**` for backwards compatibility, but is deprecated
         if ($trustedIps === '*' || $trustedIps === '**') {
-            return $this->setTrustedProxyIpAddressesToTheCallingIp($request);
+            $trustedIps = '0.0.0.0/0';
         }
 
         // Support IPs addresses separated by comma
