@@ -17,7 +17,7 @@
 * [Laravel 6.x](https://laravel.com/docs/6.x/requests#configuring-trusted-proxies) Docs (`fideloper/proxy:^4.0`)
 * [Laravel 7.x](https://laravel.com/docs/7.x/requests#configuring-trusted-proxies) Docs (`fideloper/proxy:^4.2`)
 * [Laravel 8.x](https://laravel.com/docs/8.x/requests#configuring-trusted-proxies) Docs (`fideloper/proxy:^4.3`)
-
+* [Laravel 9.x](https://laravel.com/docs/9.x/requests#configuring-trusted-proxies) Docs (**Don't use this package**. [Explanation here](https://github.com/fideloper/TrustedProxy/issues/152), [Upgrade docs here](https://laravel.com/docs/9.x/upgrade))
 
 ### Laravel 5.0 - 5.4
 
